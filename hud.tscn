@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://wkvaoylsgo3v"]
+
+[ext_resource type="Script" path="res://hud.gd" id="1_sc8te"]
+[ext_resource type="FontFile" uid="uid://ci7hujwf6b2mu" path="res://assets/fonts/vcr_osd_mono/VCR_OSD_MONO_1.001.ttf" id="2_xb2y5"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_sc8te")
+
+[node name="audienceLabel" type="Label" parent="."]
+offset_left = 117.0
+offset_top = 83.0
+offset_right = 230.0
+offset_bottom = 140.0
+theme_override_fonts/font = ExtResource("2_xb2y5")
+theme_override_font_sizes/font_size = 64
+text = "999"
+
+[node name="messageLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 285.0
+offset_top = 89.0
+offset_right = 548.0
+offset_bottom = 146.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_xb2y5")
+theme_override_font_sizes/font_size = 64
+text = "Ready !"
+
+[node name="startButton" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -50.0
+offset_right = 125.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_xb2y5")
+theme_override_font_sizes/font_size = 64
+text = "Start"
+
+[node name="messageTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="pressed" from="startButton" to="." method="_on_start_button_pressed"]
+[connection signal="timeout" from="messageTimer" to="." method="_on_message_timer_timeout"]

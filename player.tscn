@@ -1,0 +1,81 @@
+[gd_scene load_steps=11 format=3 uid="uid://cwmq66p2fgfkg"]
+
+[ext_resource type="Texture2D" uid="uid://cppbdpio5mku1" path="res://assets/teto_sprites/down_1.png" id="1_lgg0y"]
+[ext_resource type="Script" path="res://player.gd" id="1_u6j6x"]
+[ext_resource type="Texture2D" uid="uid://dr6ls7ek2npby" path="res://assets/teto_sprites/down_2.png" id="2_bugl6"]
+[ext_resource type="Texture2D" uid="uid://do6gef81soidg" path="res://assets/teto_sprites/right_1.png" id="5_t0oyj"]
+[ext_resource type="Texture2D" uid="uid://b458vujj4b4ai" path="res://assets/battery_sprites/battery_empty.png" id="6_emdiw"]
+[ext_resource type="Texture2D" uid="uid://17hbe3q7vjbe" path="res://assets/teto_sprites/right_2.png" id="6_es1gw"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lrldp"]
+load_path = "res://.godot/imported/up_1.png-fec9b8187958583cbf4e3722c1cde6d6.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_dwrh4"]
+load_path = "res://.godot/imported/up_2.png-afacc736c0c29a73d9079dc7ab153912.ctex"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cupns"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_lgg0y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_bugl6")
+}],
+"loop": true,
+"name": &"walk_d",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_t0oyj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_es1gw")
+}],
+"loop": true,
+"name": &"walk_r",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("CompressedTexture2D_lrldp")
+}, {
+"duration": 1.0,
+"texture": SubResource("CompressedTexture2D_dwrh4")
+}],
+"loop": true,
+"name": &"walk_u",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1y7p6"]
+size = Vector2(80, 80)
+
+[node name="Player" type="Area2D"]
+collision_layer = 287
+collision_mask = 287
+script = ExtResource("1_u6j6x")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_cupns")
+animation = &"walk_d"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1y7p6")
+
+[node name="hitTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -80)
+scale = Vector2(5, 5)
+texture = ExtResource("6_emdiw")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="hitTimer" to="." method="_on_hit_timer_timeout"]
