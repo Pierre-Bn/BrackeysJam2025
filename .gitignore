@@ -1,8 +1,4 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
-<<<<<<< HEAD
 TheShowMustGoOn.exe
-=======
-TheShowMustGoOn.exe
->>>>>>> f9863bfb9f54889b00ac1b88c916ff7ddcc4b32f
