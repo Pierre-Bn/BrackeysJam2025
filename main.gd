@@ -2,6 +2,7 @@ extends Node
 
 @export var mob_scene: PackedScene
 @export var battery_scene: PackedScene
+@export var sine_puzzle: PackedScene
 
 var audienceHealth
 var time_survived

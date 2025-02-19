@@ -25,7 +25,9 @@ func battery_submitted() -> void :
 			busyCoords
 		)
 		$chargeTimer.start()
+		resetProgressBar(true)
 		await $chargeTimer.timeout
+		resetProgressBar(false)
 		print("charge finished")
 		set_cell(
 			coords,
@@ -34,6 +36,14 @@ func battery_submitted() -> void :
 		chargedBattery.emit()
 		slotAvailable = true
 		
+func resetProgressBar(show: bool):
+	$batteryChargeBar.value = 0
+	if(show):
+		$batteryChargeBar.show()
+	else:
+		$batteryChargeBar.hide()
+
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -61,3 +71,8 @@ func reset():
 		freeCoords
 	)
 	pass
+
+
+func _on_global_tick_timer_timeout() -> void:
+	$batteryChargeBar.value += 1
+	pass # Replace with function body.

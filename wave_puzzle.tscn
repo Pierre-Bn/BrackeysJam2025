@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7ncio0pwxh4f"]
+
+[ext_resource type="Script" path="res://target_sine.gd" id="1_5gyov"]
+[ext_resource type="Script" path="res://input_sine.gd" id="1_dvx7s"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="inputSine" type="Line2D" parent="."]
+script = ExtResource("1_dvx7s")
+
+[node name="targetSine" type="Line2D" parent="inputSine"]
+script = ExtResource("1_5gyov")
+wavelength = 30
+intensity = 10
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 101.0
+offset_top = 109.0
+offset_right = 1172.0
+offset_bottom = 847.0

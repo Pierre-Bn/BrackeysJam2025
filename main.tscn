@@ -1,9 +1,10 @@
-[gd_scene load_steps=21 format=4 uid="uid://b0dxf5xj7ksb7"]
+[gd_scene load_steps=22 format=4 uid="uid://b0dxf5xj7ksb7"]
 
 [ext_resource type="PackedScene" uid="uid://cwmq66p2fgfkg" path="res://player.tscn" id="1_20vq2"]
 [ext_resource type="Script" path="res://main.gd" id="1_u8reb"]
 [ext_resource type="PackedScene" uid="uid://cysktlirfd1sa" path="res://mob.tscn" id="2_p1emh"]
 [ext_resource type="PackedScene" uid="uid://mql5ig0peqw1" path="res://battery.tscn" id="3_eq8ru"]
+[ext_resource type="PackedScene" uid="uid://b7ncio0pwxh4f" path="res://wave_puzzle.tscn" id="4_5igfi"]
 [ext_resource type="PackedScene" uid="uid://wkvaoylsgo3v" path="res://hud.tscn" id="4_v6k7g"]
 [ext_resource type="Texture2D" uid="uid://cg3hvlicrnqnb" path="res://assets/tiles/tilemap-use.png" id="5_4cmto"]
 [ext_resource type="Script" path="res://charge.gd" id="7_fv7ns"]
@@ -2336,9 +2337,16 @@ sources/0 = SubResource("TileSetAtlasSource_b52qh")
 script = ExtResource("1_u8reb")
 mob_scene = ExtResource("2_p1emh")
 battery_scene = ExtResource("3_eq8ru")
+sine_puzzle = ExtResource("4_5igfi")
+
+[node name="CanvasLayer" parent="." instance=ExtResource("4_5igfi")]
 
 [node name="Player" parent="." instance=ExtResource("1_20vq2")]
 position = Vector2(640, 512)
+
+[node name="globalTickTimer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
 
 [node name="mobTimer" type="Timer" parent="."]
 
@@ -2376,6 +2384,12 @@ script = ExtResource("7_fv7ns")
 wait_time = 5.0
 one_shot = true
 
+[node name="batteryChargeBar" type="ProgressBar" parent="Layers/charge"]
+offset_left = 640.0
+offset_top = 808.0
+offset_right = 720.0
+offset_bottom = 835.0
+
 [node name="charged" type="TileMapLayer" parent="Layers"]
 tile_set = SubResource("TileSet_b7bo0")
 script = ExtResource("8_qbj57")
@@ -2396,8 +2410,15 @@ volume_db = 24.0
 stream = ExtResource("12_mugss")
 volume_db = 24.0
 
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [connection signal="hit" from="Player" to="." method="_on_player_hit"]
 [connection signal="plugBattery" from="Player" to="." method="_on_player_plug_battery"]
+[connection signal="timeout" from="globalTickTimer" to="Layers/charge" method="_on_global_tick_timer_timeout"]
 [connection signal="timeout" from="mobTimer" to="." method="_on_mob_timer_timeout"]
 [connection signal="timeout" from="startTimer" to="." method="_on_start_timer_timeout"]
 [connection signal="timeout" from="audienceTimer" to="." method="_on_audience_timer_timeout"]
