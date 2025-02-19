@@ -7,8 +7,8 @@ signal solved
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	wavelength = randi_range(10,30)
-	intensity = randi_range(10,150)
+	wavelength = randi_range(1,3) * 10
+	intensity = randi_range(1,10) * 10
 	pass # Replace with function body.
 
 
@@ -26,26 +26,27 @@ func _process(delta: float) -> void:
 		
 	points = array
 	
-	if(Input.is_action_pressed("move_up")):
-		intensity += 1
-	if(Input.is_action_pressed("move_down")):
-		intensity -= 1
-	if(Input.is_action_pressed("move_left")):
-		wavelength -= 1
-	if(Input.is_action_pressed("move_right")):
-		wavelength += 1
+	if(!check_match()):
+		if(Input.is_action_just_pressed("move_up")):
+			intensity += 10
+		if(Input.is_action_just_pressed("move_down")):
+			intensity -= 10
+		if(Input.is_action_just_pressed("move_left")):
+			wavelength -= 10
+		if(Input.is_action_just_pressed("move_right")):
+			wavelength += 10
 		
-	if(wavelength < 10): wavelength = 10
-	if(wavelength < 30): wavelength = 30
-	if(intensity < 10): intensity = 10
-	if(intensity < 150) : intensity = 150
-		
-	if(check_match()):
+		if(wavelength < 10): wavelength = 10
+		if(wavelength > 30): wavelength = 30
+		if(intensity < 10): intensity = 10
+		if(intensity > 100) : intensity = 100
+	else:
+		print("target wl : " + str($targetSine.wavelength))
+		print("found wl : " + str(wavelength))
+		print("target in : " + str($targetSine.intensity))
+		print("found in : " + str(intensity))
 		$targetSine.default_color = Color(0,1,0)
 		solved.emit()
-		_ready()
-		$targetSine._ready()
-	pass
 
 func check_match() -> bool:
-	return ((abs(wavelength) - abs($targetSine.wavelength) < 3) && (abs(intensity) - abs($targetSine.intensity) < 5))
+	return ((abs(wavelength - $targetSine.wavelength) < 3) && (abs(intensity - $targetSine.intensity) < 5))

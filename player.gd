@@ -7,6 +7,7 @@ signal giveBattery
 signal plugBattery
 
 @export var speed = 400
+var previousSpeed
 var screen_size 
 var hasBattery
 var isBatteryCharged
@@ -38,7 +39,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("move_up"):
 		velocity.y -= 1
 
-	if velocity.length() > 0:
+	if (velocity.length() > 0):
 		velocity = velocity.normalized() * speed
 		if(velocity.x != 0) :
 			$AnimatedSprite2D.play("walk_r")
@@ -94,7 +95,18 @@ func _on_body_entered(body: Node2D) -> void:
 		$Sprite2D.hide()
 		pass
 		
+	if (body.is_in_group("wave_puzzle_spawners")):
+		print("walked on spawner")
+		body.call_deferred("start_puzzle")
+		previousSpeed = speed
+		speed = 0
+		pass
+
+func reset_speed() -> void:
+	speed = previousSpeed
+
 func _on_body_exited(body: Node2D) -> void:
+	
 	if (body.name == "spikes"):
 		speed = 400
 		pass

@@ -5,8 +5,8 @@ extends Line2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	wavelength = randi_range(10,30)
-	intensity = randi_range(10,150)
+	wavelength = randi_range(1,3) * 10
+	intensity = randi_range(1,10) * 10
 	
 	var array = []
 	

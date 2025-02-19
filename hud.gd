@@ -4,6 +4,7 @@ signal start_game
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$audienceHealth.value = 100
 	pass # Replace with function body.
 
 func show_message(text):
@@ -16,6 +17,7 @@ func _process(delta: float) -> void:
 	pass
 
 func show_game_over():
+	print("show game over")
 	show_message("Game Over")
 	# Wait until the MessageTimer has counted down.
 	await $messageTimer.timeout
@@ -25,8 +27,11 @@ func show_game_over():
 	await get_tree().create_timer(1.0).timeout
 	$startButton.show()
 	
-func update_audience_health(audienceHealth):
-	$audienceLabel.text = str(audienceHealth) + " %"
+func update_battery(battery):
+	$batteryLabel.text = str(battery) + " %"
+
+func update_audience_health(health):
+	$audienceHealth.value = health
 
 func update_time_survived(timeSurvived):
 	var seconds = timeSurvived%60

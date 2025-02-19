@@ -14,7 +14,7 @@ wavelength = 30
 intensity = 10
 
 [node name="Panel" type="Panel" parent="."]
-offset_left = 101.0
-offset_top = 109.0
-offset_right = 1172.0
-offset_bottom = 847.0
+offset_left = 97.0
+offset_top = 345.0
+offset_right = 1168.0
+offset_bottom = 609.0
