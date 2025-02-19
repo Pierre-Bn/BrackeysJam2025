@@ -50,5 +50,14 @@ text = "Start"
 wait_time = 2.0
 one_shot = true
 
+[node name="timeSurvivedLabel" type="Label" parent="."]
+offset_left = 128.0
+offset_top = 788.0
+offset_right = 316.0
+offset_bottom = 845.0
+theme_override_fonts/font = ExtResource("2_xb2y5")
+theme_override_font_sizes/font_size = 64
+text = "00:00"
+
 [connection signal="pressed" from="startButton" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="messageTimer" to="." method="_on_message_timer_timeout"]

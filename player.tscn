@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cwmq66p2fgfkg"]
+[gd_scene load_steps=12 format=3 uid="uid://cwmq66p2fgfkg"]
 
 [ext_resource type="Texture2D" uid="uid://cppbdpio5mku1" path="res://assets/teto_sprites/down_1.png" id="1_lgg0y"]
 [ext_resource type="Script" path="res://player.gd" id="1_u6j6x"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://do6gef81soidg" path="res://assets/teto_sprites/right_1.png" id="5_t0oyj"]
 [ext_resource type="Texture2D" uid="uid://b458vujj4b4ai" path="res://assets/battery_sprites/battery_empty.png" id="6_emdiw"]
 [ext_resource type="Texture2D" uid="uid://17hbe3q7vjbe" path="res://assets/teto_sprites/right_2.png" id="6_es1gw"]
+[ext_resource type="AudioStream" uid="uid://botydlkwb13n" path="res://assets/audio/playerInteractBattery.wav" id="7_ixdfr"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lrldp"]
 load_path = "res://.godot/imported/up_1.png-fec9b8187958583cbf4e3722c1cde6d6.ctex"
@@ -75,6 +76,10 @@ texture_filter = 1
 position = Vector2(0, -80)
 scale = Vector2(5, 5)
 texture = ExtResource("6_emdiw")
+
+[node name="interactBattery" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_ixdfr")
+volume_db = 24.0
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

@@ -50,3 +50,14 @@ func _on_charged_free_charge_slot(immediatelyReplace : bool) -> void:
 	if(immediatelyReplace):
 		battery_submitted()
 	pass # Replace with function body.
+
+func reset():
+	var coords = Vector2i(8,9)
+	var busyCoords = Vector2i(2,0)
+	var freeCoords = Vector2i(1,0)
+	set_cell(
+		coords,
+		0,
+		freeCoords
+	)
+	pass

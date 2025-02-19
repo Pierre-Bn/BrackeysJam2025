@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://b0dxf5xj7ksb7"]
+[gd_scene load_steps=21 format=4 uid="uid://b0dxf5xj7ksb7"]
 
 [ext_resource type="PackedScene" uid="uid://cwmq66p2fgfkg" path="res://player.tscn" id="1_20vq2"]
 [ext_resource type="Script" path="res://main.gd" id="1_u8reb"]
@@ -8,6 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://cg3hvlicrnqnb" path="res://assets/tiles/tilemap-use.png" id="5_4cmto"]
 [ext_resource type="Script" path="res://charge.gd" id="7_fv7ns"]
 [ext_resource type="Script" path="res://charged.gd" id="8_qbj57"]
+[ext_resource type="AudioStream" uid="uid://bjxad4yc5aoc2" path="res://assets/audio/teto_hit.wav" id="10_uvtts"]
+[ext_resource type="AudioStream" uid="uid://bm3gr2ws56ulo" path="res://assets/audio/fuel_invalid.wav" id="11_6ipa8"]
+[ext_resource type="AudioStream" uid="uid://dups2irjrd1v7" path="res://assets/audio/fuel_valid.wav" id="12_mugss"]
 
 [sub_resource type="Curve2D" id="Curve2D_wdt4c"]
 _data = {
@@ -2380,6 +2383,18 @@ script = ExtResource("8_qbj57")
 [node name="plug" type="TileMapLayer" parent="Layers"]
 tile_map_data = PackedByteArray("AAAHAAIAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_iqd3r")
+
+[node name="playerHit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_uvtts")
+volume_db = 24.0
+
+[node name="fuelInvalid" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_6ipa8")
+volume_db = 24.0
+
+[node name="fuelValid" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_mugss")
+volume_db = 24.0
 
 [connection signal="hit" from="Player" to="." method="_on_player_hit"]
 [connection signal="plugBattery" from="Player" to="." method="_on_player_plug_battery"]

@@ -18,6 +18,9 @@ func start(pos):
 	hasBattery = false
 	$CollisionShape2D.disabled = false
 
+func toggleHitbox(enabled: bool):	
+	$CollisionShape2D.disabled = !enabled
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
@@ -47,7 +50,7 @@ func _process(delta: float) -> void:
 				$AnimatedSprite2D.play("walk_u")
 	else:
 		$AnimatedSprite2D.stop()
-		
+
 	position += velocity * delta
 	var corner1 = Vector2i(121,121)
 	var corner2 = Vector2i(screen_size.x-121, screen_size.y-121)
@@ -65,6 +68,7 @@ func _on_body_entered(body: Node2D) -> void:
 		hit.emit()
 		$CollisionShape2D.set_deferred("disabled", true)
 	if (body.is_in_group("batteries") && !hasBattery): #picking up an empty battery from the floor
+		$interactBattery.play()
 		hasBattery = true
 		isBatteryCharged = false
 		$Sprite2D.texture = preload("res://assets/battery_sprites/battery_empty.png")
@@ -75,6 +79,7 @@ func _on_body_entered(body: Node2D) -> void:
 		body.call_deferred("battery_submitted")
 	
 	if (body.name == "charged" && !(hasBattery && isBatteryCharged)): #picking up charged battery
+		$interactBattery.play()
 		print("picking up charged battery")
 		body.call_deferred("remove_battery", 8, 9, hasBattery)
 		hasBattery = true
@@ -101,6 +106,7 @@ func _on_hit_timer_timeout() -> void:
 
 func _on_charge_take_battery() -> void:
 	if(!isBatteryCharged):
+		$interactBattery.play()
 		hasBattery = false
 		isBatteryCharged = false
 		$Sprite2D.hide()

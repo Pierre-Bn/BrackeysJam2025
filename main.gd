@@ -4,7 +4,7 @@ extends Node
 @export var battery_scene: PackedScene
 
 var audienceHealth
-
+var time_survived
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -24,8 +24,10 @@ func game_over():
 	$audienceTimer.stop()
 	$batterySpawnTimer.stop()
 	$Player.hide()
+	$Player.toggleHitbox(false)
 
 func _on_player_hit() -> void:
+	$playerHit.play()
 	audienceHealth -= 10
 	if(audienceHealth<0): 
 		audienceHealth = 0
@@ -36,21 +38,27 @@ func _on_player_get_battery() -> void:
 
 func _on_player_plug_battery(isCharged) -> void:
 	if(isCharged):
+		$fuelValid.play()
 		audienceHealth += 20
 		if(audienceHealth>100):
 			audienceHealth = 100
 	else:
+		$fuelInvalid.play()
 		audienceHealth -= 5
+	$HUD.update_audience_health(audienceHealth)
 	
 func new_game():
 	get_tree().call_group("mobs", "queue_free")
 	get_tree().call_group("batteries", "queue_free")
 	audienceHealth = 100
+	time_survived = 0
 	$HUD.update_audience_health(audienceHealth)
 	$HUD.show_message("Get Ready")
 	$Player.start($playerStart.position)
+	$Player.toggleHitbox(true)
 	$startTimer.start()
 	$batterySpawnTimer.start()
+	$mobTimer.wait_time = 1
 	reset_tiles()
 
 func reset_tiles():
@@ -89,9 +97,9 @@ func _on_battery_spawn_timer_timeout() -> void:
 func _on_start_timer_timeout() -> void:
 	$mobTimer.start()
 	$audienceTimer.start()
-	pass # Replace with function body.
 
 func _on_audience_timer_timeout() -> void:
 	audienceHealth -= 1
+	time_survived += 1
+	$HUD.update_time_survived(time_survived)
 	$HUD.update_audience_health(audienceHealth)
-	pass # Replace with function body.

@@ -13,5 +13,7 @@ func _process(delta: float) -> void:
 	pass
 
 func _on_area_2d_kill() -> void:
+	$killVirus.play()
+	await get_tree().create_timer(0.2).timeout
 	queue_free()
 	pass # Replace with function body.

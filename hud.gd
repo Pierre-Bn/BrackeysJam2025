@@ -26,7 +26,12 @@ func show_game_over():
 	$startButton.show()
 	
 func update_audience_health(audienceHealth):
-	$audienceLabel.text = str(audienceHealth)
+	$audienceLabel.text = str(audienceHealth) + " %"
+
+func update_time_survived(timeSurvived):
+	var seconds = timeSurvived%60
+	var minutes = timeSurvived/60
+	$timeSurvivedLabel.text = ("%02d" % minutes) + ":" + ("%02d" % seconds)
 
 func _on_start_button_pressed() -> void:
 	$startButton.hide()

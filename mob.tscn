@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://cysktlirfd1sa"]
+[gd_scene load_steps=10 format=3 uid="uid://cysktlirfd1sa"]
 
 [ext_resource type="Script" path="res://mob.gd" id="1_6l2nd"]
 [ext_resource type="Texture2D" uid="uid://bavcut0cq7n0i" path="res://assets/virus_sprite/frame_b.png" id="1_t8nb6"]
 [ext_resource type="Texture2D" uid="uid://dwwv3lfqmnp4" path="res://assets/virus_sprite/frame_a.png" id="2_a2lgw"]
 [ext_resource type="Texture2D" uid="uid://cvqw4yw48jn2v" path="res://assets/virus_sprite/frame_c.png" id="3_ebs6y"]
+[ext_resource type="AudioStream" uid="uid://b2jrx8geopl1r" path="res://assets/audio/kill_virus.wav" id="6_14twi"]
 [ext_resource type="Script" path="res://clickTarget.gd" id="6_j2dq2"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_0m44k"]
@@ -60,6 +61,10 @@ script = ExtResource("6_j2dq2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_xnur6")
+
+[node name="killVirus" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_14twi")
+volume_db = 24.0
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="kill" from="Area2D" to="." method="_on_area_2d_kill"]

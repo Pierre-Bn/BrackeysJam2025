@@ -34,3 +34,11 @@ func remove_battery(x : int, y : int, immediatelyReplace : bool) -> void:
 	)
 	freeChargeSlot.emit(immediatelyReplace)
 	pass
+
+func reset():
+	var coords = Vector2i(8,9)
+	set_cell(
+		coords,
+		-1
+	)
+	pass
