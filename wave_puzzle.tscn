@@ -6,6 +6,7 @@
 [node name="CanvasLayer" type="CanvasLayer"]
 
 [node name="inputSine" type="Line2D" parent="."]
+default_color = Color(1, 1, 1, 0.501961)
 script = ExtResource("1_dvx7s")
 
 [node name="targetSine" type="Line2D" parent="inputSine"]
@@ -14,7 +15,14 @@ wavelength = 30
 intensity = 10
 
 [node name="Panel" type="Panel" parent="."]
-offset_left = 97.0
-offset_top = 345.0
-offset_right = 1168.0
-offset_bottom = 609.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -535.5
+offset_top = -132.0
+offset_right = 535.5
+offset_bottom = 132.0
+grow_horizontal = 2
+grow_vertical = 2

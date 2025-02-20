@@ -12,6 +12,9 @@ var screen_size
 var hasBattery
 var isBatteryCharged
 
+var playableCoordsTopLeft = Vector2(480,80)
+var playableCoordsBottomRight = Vector2(1120,880)
+
 func start(pos):
 	position = pos
 	show()
@@ -53,10 +56,7 @@ func _process(delta: float) -> void:
 		$AnimatedSprite2D.stop()
 
 	position += velocity * delta
-	var corner1 = Vector2i(121,121)
-	var corner2 = Vector2i(screen_size.x-121, screen_size.y-121)
-	#position = position.clamp(Vector2.ZERO, screen_size)
-	position = position.clamp(corner1, corner2)
+	position = position.clamp(playableCoordsTopLeft, playableCoordsBottomRight)
 
 
 func _on_body_entered(body: Node2D) -> void:	

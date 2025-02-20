@@ -28,6 +28,7 @@ func start_puzzle() -> void:
 	var puzzle = get_node("CanvasLayer").get_node("inputSine")
 	puzzle.solved.connect(_on_solved)
 	toggleHitbox(false)
+	$angryProgressTimer.stop()
 	pass
 
 func _on_solved():

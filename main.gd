@@ -8,6 +8,9 @@ var audience_health
 var battery
 var time_survived
 var angry_wave
+var playableCoordsTopLeft = Vector2(480,80)
+var playableCoordsBottomRight = Vector2(1120,880)
+var happyTeto = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -59,6 +62,7 @@ func _on_player_plug_battery(isCharged) -> void:
 		if(battery <= 0):
 			battery = 0
 	$HUD.update_battery(battery)
+	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto)
 	
 func new_game():
 	print("new game")
@@ -71,7 +75,8 @@ func new_game():
 	$Player.start($playerStart.position)
 	$Player.toggleHitbox(true)
 	$Player.speed = 400
-	$startTimer.start()
+	$mobTimer.start()
+	$audienceTimer.start()
 	$batterySpawnTimer.start()
 	$sineSpawnTimer.start()
 	$mobTimer.wait_time = 1
@@ -106,12 +111,18 @@ func _on_mob_timer_timeout() -> void:
 
 func _on_battery_spawn_timer_timeout() -> void:
 	var battery = battery_scene.instantiate()
-	battery.position = Vector2(randi_range(64,1216), randi_range(64,896))
+	battery.position = Vector2(
+		randi_range(playableCoordsTopLeft.x, playableCoordsBottomRight.x), 
+		randi_range(playableCoordsTopLeft.y, playableCoordsBottomRight.y)
+	)
 	add_child(battery)
 	
 func _on_sine_spawn_timer_timeout() -> void:
 	var wavePuzzleSpawner = wave_puzzle_spawner_scene.instantiate()
-	wavePuzzleSpawner.position = Vector2(randi_range(64,1216), randi_range(64,896))
+	wavePuzzleSpawner.position = Vector2(
+		randi_range(playableCoordsTopLeft.x, playableCoordsBottomRight.x), 
+		randi_range(playableCoordsTopLeft.y, playableCoordsBottomRight.y)
+	)
 	wavePuzzleSpawner.completed.connect(_on_completed)
 	wavePuzzleSpawner.angry.connect(_on_angry)
 	wavePuzzleSpawner.clear_angry.connect(_on_clear_angry)
@@ -120,11 +131,9 @@ func _on_sine_spawn_timer_timeout() -> void:
 func _on_completed() -> void:
 	$Player.reset_speed()
 
-func _on_start_timer_timeout() -> void:
-	$mobTimer.start()
-	$audienceTimer.start()
 
 func _on_audience_timer_timeout() -> void:
+	happyTeto = !happyTeto
 	battery -= 1
 	print(battery)
 	print(angry_wave)
@@ -137,9 +146,12 @@ func _on_audience_timer_timeout() -> void:
 	$HUD.update_time_survived(time_survived)
 	$HUD.update_battery(battery)
 	$HUD.update_audience_health(audience_health)
+	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto)
 
 func _on_angry() -> void:
 	angry_wave += 1
+	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto)
 
 func _on_clear_angry() -> void:
 	angry_wave -= 1
+	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto)

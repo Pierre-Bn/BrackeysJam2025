@@ -44,3 +44,13 @@ func _on_start_button_pressed() -> void:
 
 func _on_message_timer_timeout() -> void:
 	$messageLabel.hide()
+
+func update_teto_status(angry: bool, empty: bool, happy: bool) -> void:
+	if(empty):
+		$tetoUi.texture = preload("res://assets/ui/teto_status/teto_status_battery.png")
+	elif(angry):
+		$tetoUi.texture = preload("res://assets/ui/teto_status/teto_status_wave.png")
+	elif(happy):
+		$tetoUi.texture = preload("res://assets/ui/teto_status/teto_status_good_1.png")
+	else:
+		$tetoUi.texture = preload("res://assets/ui/teto_status/teto_status_good_2.png")

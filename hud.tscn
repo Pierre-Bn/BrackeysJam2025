@@ -1,31 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://wkvaoylsgo3v"]
+[gd_scene load_steps=7 format=3 uid="uid://wkvaoylsgo3v"]
 
 [ext_resource type="Script" path="res://hud.gd" id="1_sc8te"]
 [ext_resource type="FontFile" uid="uid://ci7hujwf6b2mu" path="res://assets/fonts/vcr_osd_mono/VCR_OSD_MONO_1.001.ttf" id="2_xb2y5"]
+[ext_resource type="Texture2D" uid="uid://cmfg6emtmvblc" path="res://assets/ui/battery.png" id="3_qiukj"]
+[ext_resource type="Texture2D" uid="uid://dqhe6l5vny3r3" path="res://assets/ui/teto_status/teto_status_good_1.png" id="4_72d4i"]
+[ext_resource type="Texture2D" uid="uid://cae0gsy2dr8jm" path="res://assets/ui/timer_bg.png" id="5_hh4mc"]
+[ext_resource type="Texture2D" uid="uid://b68vngsurxi66" path="res://assets/ui/glowstick_bg.png" id="6_1i5hq"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_sc8te")
-
-[node name="batteryLabel" type="Label" parent="."]
-offset_left = 117.0
-offset_top = 83.0
-offset_right = 230.0
-offset_bottom = 140.0
-theme_override_fonts/font = ExtResource("2_xb2y5")
-theme_override_font_sizes/font_size = 64
-text = "999"
 
 [node name="messageLabel" type="Label" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 285.0
-offset_top = 89.0
-offset_right = 548.0
-offset_bottom = 146.0
+offset_left = 485.0
+offset_top = 22.0
+offset_right = 748.0
+offset_bottom = 79.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_xb2y5")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "Ready !"
 
 [node name="startButton" type="Button" parent="."]
@@ -34,10 +29,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -125.0
-offset_top = -50.0
-offset_right = 125.0
-offset_bottom = 50.0
+offset_left = -129.0
+offset_top = -53.0
+offset_right = 121.0
+offset_bottom = 47.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -50,21 +45,70 @@ text = "Start"
 wait_time = 2.0
 one_shot = true
 
+[node name="batteryUi" type="TextureRect" parent="."]
+texture_filter = 1
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(5, 5)
+texture = ExtResource("3_qiukj")
+
+[node name="tetoUi" type="TextureRect" parent="."]
+texture_filter = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -720.0
+offset_right = 80.0
+offset_bottom = -576.0
+grow_vertical = 0
+scale = Vector2(5, 5)
+texture = ExtResource("4_72d4i")
+
+[node name="timerUi" type="TextureRect" parent="."]
+texture_filter = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -400.0
+offset_right = -320.0
+offset_bottom = 32.0
+grow_horizontal = 0
+scale = Vector2(5, 5)
+texture = ExtResource("5_hh4mc")
+
+[node name="glowstickUi" type="TextureRect" parent="."]
+texture_filter = 1
+offset_left = 1200.0
+offset_top = 160.0
+offset_right = 1280.0
+offset_bottom = 320.0
+scale = Vector2(5, 5)
+texture = ExtResource("6_1i5hq")
+
 [node name="timeSurvivedLabel" type="Label" parent="."]
-offset_left = 128.0
-offset_top = 788.0
-offset_right = 316.0
-offset_bottom = 845.0
+offset_left = 1212.0
+offset_top = 22.0
+offset_right = 1587.0
+offset_bottom = 135.0
 theme_override_fonts/font = ExtResource("2_xb2y5")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 128
 text = "00:00"
 
+[node name="batteryLabel" type="Label" parent="."]
+offset_left = 127.0
+offset_top = 92.0
+offset_right = 240.0
+offset_bottom = 149.0
+theme_override_fonts/font = ExtResource("2_xb2y5")
+theme_override_font_sizes/font_size = 64
+text = "999"
+
 [node name="audienceHealth" type="ProgressBar" parent="."]
-offset_left = 1116.0
-offset_top = 359.0
-offset_right = 1168.0
-offset_bottom = 851.0
-fill_mode = 2
+offset_left = 1341.0
+offset_top = 215.0
+offset_right = 1415.0
+offset_bottom = 679.0
+fill_mode = 3
 
 [connection signal="pressed" from="startButton" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="messageTimer" to="." method="_on_message_timer_timeout"]

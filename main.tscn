@@ -15,7 +15,7 @@
 
 [sub_resource type="Curve2D" id="Curve2D_wdt4c"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1280, 0, 0, 0, 0, 0, 1280, 960, 0, 0, 0, 0, 0, 960, 0, 0, 0, 0, -1, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 240, 0, 0, 0, 0, 0, 1040, 8, 0, 0, 0, 0, 1032, 952, 0, 0, 0, 0, 240, 960, 0, 0, 0, 0, 240, 0)
 }
 point_count = 5
 
@@ -2340,17 +2340,13 @@ battery_scene = ExtResource("3_eq8ru")
 wave_puzzle_spawner_scene = ExtResource("5_vpf7m")
 
 [node name="Player" parent="." instance=ExtResource("1_20vq2")]
-position = Vector2(640, 512)
+position = Vector2(786, 512)
 
 [node name="globalTickTimer" type="Timer" parent="."]
 wait_time = 0.05
 autostart = true
 
 [node name="mobTimer" type="Timer" parent="."]
-
-[node name="startTimer" type="Timer" parent="."]
-wait_time = 2.0
-one_shot = true
 
 [node name="audienceTimer" type="Timer" parent="."]
 
@@ -2361,19 +2357,22 @@ wait_time = 15.0
 wait_time = 9.0
 
 [node name="playerStart" type="Marker2D" parent="."]
-position = Vector2(640, 480)
+position = Vector2(786, 480)
 
 [node name="MobPath" type="Path2D" parent="."]
+position = Vector2(146, 0)
 curve = SubResource("Curve2D_wdt4c")
 
 [node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
+position = Vector2(240, 0)
+rotation = 0.00999967
 
 [node name="HUD" parent="." instance=ExtResource("4_v6k7g")]
 
 [node name="Layers" type="Node" parent="."]
 
 [node name="spikes" type="TileMapLayer" parent="Layers"]
-tile_map_data = PackedByteArray("AAADAAQAAQAAAAAAAAADAAUAAQAAAAAAAAADAAYAAQAAAAAAAAADAAcAAQAAAAAAAAAMAAQAAQAAAAAAAAAMAAUAAQAAAAAAAAAMAAYAAQAAAAAAAAAMAAcAAQAAAAAAAAAOAAAAAQAHAAIAAAANAAAAAQAHAAIAAAAMAAAAAQAHAAIAAAALAAAAAQAHAAIAAAAKAAAAAQAHAAIAAAAJAAAAAQAHAAIAAAAIAAAAAQAHAAIAAAAHAAAAAQAHAAIAAAAGAAAAAQAHAAIAAAAFAAAAAQAHAAIAAAAEAAAAAQAHAAIAAAADAAAAAQAHAAIAAAACAAAAAQAHAAIAAAABAAAAAQAHAAIAAAABAAsAAQAHAAIAAAACAAsAAQAHAAIAAAADAAsAAQAHAAIAAAAEAAsAAQAHAAIAAAAFAAsAAQAHAAIAAAAGAAsAAQAHAAIAAAAHAAsAAQAHAAIAAAAIAAsAAQAHAAIAAAAJAAsAAQAHAAIAAAAKAAsAAQAHAAIAAAALAAsAAQAHAAIAAAAMAAsAAQAHAAIAAAANAAsAAQAHAAIAAAAOAAsAAQAHAAIAAAAPAAEAAQAIAAIAAAAPAAIAAQAIAAIAAAAPAAMAAQAIAAIAAAAPAAQAAQAIAAIAAAAPAAUAAQAIAAIAAAAPAAYAAQAIAAIAAAAPAAcAAQAIAAIAAAAPAAgAAQAIAAIAAAAPAAkAAQAIAAIAAAAPAAoAAQAIAAIAAAAAAAEAAQAIAAIAAAAAAAIAAQAIAAIAAAAAAAMAAQAIAAIAAAAAAAQAAQAIAAIAAAAAAAUAAQAIAAIAAAAAAAYAAQAIAAIAAAAAAAcAAQAIAAIAAAAAAAgAAQAIAAIAAAAAAAkAAQAIAAIAAAAAAAoAAQAIAAIAAAAAAAsAAQAHAAEAAAAPAAAAAQAFAAEAAAAPAAsAAQAEAAEAAAAAAAAAAQAGAAEAAAALAAMAAQAAAAAAAAAEAAgAAQAAAAAAAAAEAAMAAQAAAAAAAAALAAgAAQAAAAAAAAACAAIAAQAAAAAAAAACAAkAAQAAAAAAAAANAAkAAQAAAAAAAAANAAIAAQAAAAAAAAAHAAcAAQAAAAAAAAAIAAcAAQAAAAAAAAAHAAQAAQAAAAAAAAAIAAQAAQAAAAAAAAAFAAgAAQAAAAAAAAAKAAMAAQAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAALAAAAAQAHAAIAAAAKAAAAAQAHAAIAAAAJAAAAAQAHAAIAAAAIAAAAAQAHAAIAAAAHAAAAAQAHAAIAAAAGAAAAAQAHAAIAAAAFAAAAAQAGAAEAAAAFAAsAAQAHAAEAAAAGAAsAAQAHAAIAAAAHAAsAAQAHAAIAAAAIAAsAAQAHAAIAAAAJAAsAAQAHAAIAAAAKAAsAAQAHAAIAAAALAAsAAQAHAAIAAAAMAAAAAQAHAAIAAAAMAAsAAQAHAAIAAAAFAAEAAQAIAAIAAAAFAAIAAQAIAAIAAAAFAAMAAQAIAAIAAAAFAAQAAQAIAAIAAAAFAAUAAQAIAAIAAAAFAAYAAQAIAAIAAAAFAAcAAQAIAAIAAAAFAAgAAQAIAAIAAAAFAAkAAQAIAAIAAAAFAAoAAQAIAAIAAAAOAAEAAQAIAAIAAAAOAAIAAQAIAAIAAAAOAAMAAQAIAAIAAAAOAAQAAQAIAAIAAAAOAAUAAQAIAAIAAAAOAAYAAQAIAAIAAAAOAAcAAQAIAAIAAAAOAAgAAQAIAAIAAAAOAAkAAQAIAAIAAAAOAAoAAQAIAAIAAAANAAsAAQAHAAIAAAANAAAAAQAHAAIAAAAOAAAAAQAFAAEAAAAOAAsAAQAEAAEAAAA=")
 tile_set = SubResource("TileSet_85w72")
 
 [node name="charge" type="TileMapLayer" parent="Layers"]
@@ -2422,7 +2421,6 @@ offset_bottom = 40.0
 [connection signal="timeout" from="globalTickTimer" to="." method="_on_global_tick_timer_timeout"]
 [connection signal="timeout" from="globalTickTimer" to="Layers/charge" method="_on_global_tick_timer_timeout"]
 [connection signal="timeout" from="mobTimer" to="." method="_on_mob_timer_timeout"]
-[connection signal="timeout" from="startTimer" to="." method="_on_start_timer_timeout"]
 [connection signal="timeout" from="audienceTimer" to="." method="_on_audience_timer_timeout"]
 [connection signal="timeout" from="batterySpawnTimer" to="." method="_on_battery_spawn_timer_timeout"]
 [connection signal="timeout" from="sineSpawnTimer" to="." method="_on_sine_spawn_timer_timeout"]

@@ -1,0 +1,10 @@
+todo :
+	afficher != images de game over selon temps
+	fix reactivation mouvement si hit pdt puzzle
+
+	fiche d'ui pour puzzle wave
+		boutons qui tournent, 45° par input?
+	sfx:
+		validation quand puzzle complété, angry quand angry
+		validation un peu moins positif quand pile chargée
+			
