@@ -11,6 +11,7 @@ var angry_wave
 var playableCoordsTopLeft = Vector2(480,80)
 var playableCoordsBottomRight = Vector2(1120,880)
 var happyTeto = true
+var justHit = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -29,7 +30,7 @@ func _process(delta: float) -> void:
 func game_over():
 	audience_health = 100
 	$HUD.update_audience_health(audience_health)
-	$HUD.show_game_over()
+	$HUD.show_game_over(time_survived)
 	$sineSpawnTimer.stop()
 	$mobTimer.stop()
 	$audienceTimer.stop()
@@ -46,6 +47,11 @@ func _on_player_hit() -> void:
 	if(audience_health<0): 
 		audience_health = 0
 	$HUD.update_audience_health(audience_health)
+	justHit = true
+	update_teto_status()
+	await get_tree().create_timer(0.5).timeout
+	justHit = false
+	update_teto_status()	
 	
 func _on_player_get_battery() -> void:
 	pass
@@ -62,7 +68,7 @@ func _on_player_plug_battery(isCharged) -> void:
 		if(battery <= 0):
 			battery = 0
 	$HUD.update_battery(battery)
-	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto)
+	update_teto_status()
 	
 func new_game():
 	print("new game")
@@ -115,6 +121,11 @@ func _on_battery_spawn_timer_timeout() -> void:
 		randi_range(playableCoordsTopLeft.x, playableCoordsBottomRight.x), 
 		randi_range(playableCoordsTopLeft.y, playableCoordsBottomRight.y)
 	)
+	while(distance_to_player(battery.position.x, battery.position.y) < 200):
+		battery.position = Vector2(
+			randi_range(playableCoordsTopLeft.x, playableCoordsBottomRight.x), 
+			randi_range(playableCoordsTopLeft.y, playableCoordsBottomRight.y)
+		)
 	add_child(battery)
 	
 func _on_sine_spawn_timer_timeout() -> void:
@@ -123,6 +134,11 @@ func _on_sine_spawn_timer_timeout() -> void:
 		randi_range(playableCoordsTopLeft.x, playableCoordsBottomRight.x), 
 		randi_range(playableCoordsTopLeft.y, playableCoordsBottomRight.y)
 	)
+	while(distance_to_player(wavePuzzleSpawner.position.x, wavePuzzleSpawner.position.y) < 200):
+		wavePuzzleSpawner.position = Vector2(
+			randi_range(playableCoordsTopLeft.x, playableCoordsBottomRight.x), 
+			randi_range(playableCoordsTopLeft.y, playableCoordsBottomRight.y)
+		)
 	wavePuzzleSpawner.completed.connect(_on_completed)
 	wavePuzzleSpawner.angry.connect(_on_angry)
 	wavePuzzleSpawner.clear_angry.connect(_on_clear_angry)
@@ -146,12 +162,18 @@ func _on_audience_timer_timeout() -> void:
 	$HUD.update_time_survived(time_survived)
 	$HUD.update_battery(battery)
 	$HUD.update_audience_health(audience_health)
-	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto)
+	update_teto_status()
 
 func _on_angry() -> void:
 	angry_wave += 1
-	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto)
+	update_teto_status()
 
 func _on_clear_angry() -> void:
 	angry_wave -= 1
-	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto)
+	
+
+func distance_to_player(x,y) -> int:
+	return sqrt(abs(x-$Player.position.x)**2 + abs(y-$Player.position.y)**2)
+	
+func update_teto_status() -> void:
+	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto, justHit)

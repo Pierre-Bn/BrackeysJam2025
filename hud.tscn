@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://wkvaoylsgo3v"]
+[gd_scene load_steps=8 format=3 uid="uid://wkvaoylsgo3v"]
 
 [ext_resource type="Script" path="res://hud.gd" id="1_sc8te"]
 [ext_resource type="FontFile" uid="uid://ci7hujwf6b2mu" path="res://assets/fonts/vcr_osd_mono/VCR_OSD_MONO_1.001.ttf" id="2_xb2y5"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dqhe6l5vny3r3" path="res://assets/ui/teto_status/teto_status_good_1.png" id="4_72d4i"]
 [ext_resource type="Texture2D" uid="uid://cae0gsy2dr8jm" path="res://assets/ui/timer_bg.png" id="5_hh4mc"]
 [ext_resource type="Texture2D" uid="uid://b68vngsurxi66" path="res://assets/ui/glowstick_bg.png" id="6_1i5hq"]
+[ext_resource type="Texture2D" uid="uid://dwpfe38553vv8" path="res://assets/ui/game_over_screens/bad.png" id="7_gmcff"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_sc8te")
@@ -22,24 +23,6 @@ grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_xb2y5")
 theme_override_font_sizes/font_size = 32
 text = "Ready !"
-
-[node name="startButton" type="Button" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -129.0
-offset_top = -53.0
-offset_right = 121.0
-offset_bottom = 47.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_fonts/font = ExtResource("2_xb2y5")
-theme_override_font_sizes/font_size = 64
-text = "Start"
 
 [node name="messageTimer" type="Timer" parent="."]
 wait_time = 2.0
@@ -85,15 +68,6 @@ offset_bottom = 320.0
 scale = Vector2(5, 5)
 texture = ExtResource("6_1i5hq")
 
-[node name="timeSurvivedLabel" type="Label" parent="."]
-offset_left = 1212.0
-offset_top = 22.0
-offset_right = 1587.0
-offset_bottom = 135.0
-theme_override_fonts/font = ExtResource("2_xb2y5")
-theme_override_font_sizes/font_size = 128
-text = "00:00"
-
 [node name="batteryLabel" type="Label" parent="."]
 offset_left = 127.0
 offset_top = 92.0
@@ -110,5 +84,52 @@ offset_right = 1415.0
 offset_bottom = 679.0
 fill_mode = 3
 
-[connection signal="pressed" from="startButton" to="." method="_on_start_button_pressed"]
+[node name="gameOverPicture" type="TextureRect" parent="."]
+texture_filter = 1
+offset_left = 656.0
+offset_top = 400.0
+offset_right = 944.0
+offset_bottom = 560.0
+scale = Vector2(5, 5)
+pivot_offset = Vector2(144, 80)
+texture = ExtResource("7_gmcff")
+
+[node name="startButton" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.0
+offset_top = -48.0
+offset_right = 126.0
+offset_bottom = 52.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_xb2y5")
+theme_override_font_sizes/font_size = 64
+text = "Start"
+
+[node name="timeSurvivedLabel" type="Label" parent="."]
+offset_left = 1212.0
+offset_top = 22.0
+offset_right = 1587.0
+offset_bottom = 135.0
+theme_override_fonts/font = ExtResource("2_xb2y5")
+theme_override_font_sizes/font_size = 128
+text = "00:00"
+
+[node name="timeResultLabel" type="Label" parent="."]
+offset_left = 1083.0
+offset_top = 413.0
+offset_right = 1271.0
+offset_bottom = 470.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_xb2y5")
+theme_override_font_sizes/font_size = 64
+text = "00:00"
+
 [connection signal="timeout" from="messageTimer" to="." method="_on_message_timer_timeout"]
+[connection signal="pressed" from="startButton" to="." method="_on_start_button_pressed"]

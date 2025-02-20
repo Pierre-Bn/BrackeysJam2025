@@ -20,19 +20,21 @@ func _process(delta: float) -> void:
 	if(!isAngry && $angryBar.value == 0):
 		isAngry = true
 		$Sprite2D.texture = preload("res://assets/wave_puzzle_sprite/wave_puzzle_spawner_angry.png")
+		$angryNoise.play()
 		angry.emit()
 	pass
 	
 func start_puzzle() -> void:
 	add_child(wave_puzzle_scene.instantiate())
-	var puzzle = get_node("CanvasLayer").get_node("inputSine")
+	var puzzle = get_node("wavePuzzle")
 	puzzle.solved.connect(_on_solved)
 	toggleHitbox(false)
 	$angryProgressTimer.stop()
 	pass
 
 func _on_solved():
-	await get_tree().create_timer(0.25).timeout
+	$completedNoise.play()
+	await get_tree().create_timer(0.5).timeout
 	completed.emit()
 	if(isAngry):
 		clear_angry.emit()
