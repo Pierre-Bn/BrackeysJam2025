@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://wkvaoylsgo3v"]
+[gd_scene load_steps=14 format=3 uid="uid://wkvaoylsgo3v"]
 
 [ext_resource type="Script" path="res://hud.gd" id="1_sc8te"]
 [ext_resource type="FontFile" uid="uid://ci7hujwf6b2mu" path="res://assets/fonts/vcr_osd_mono/VCR_OSD_MONO_1.001.ttf" id="2_xb2y5"]
@@ -7,26 +7,15 @@
 [ext_resource type="Texture2D" uid="uid://cae0gsy2dr8jm" path="res://assets/ui/timer_bg.png" id="5_hh4mc"]
 [ext_resource type="Texture2D" uid="uid://b68vngsurxi66" path="res://assets/ui/glowstick_bg.png" id="6_1i5hq"]
 [ext_resource type="Texture2D" uid="uid://dwpfe38553vv8" path="res://assets/ui/game_over_screens/bad.png" id="7_gmcff"]
+[ext_resource type="Texture2D" uid="uid://clo0havn183iu" path="res://assets/ui/glowstick_progress/under.png" id="7_r4fii"]
+[ext_resource type="Texture2D" uid="uid://c2c4huuxnd0vi" path="res://assets/ui/btn/btn_normal.png" id="8_k7pux"]
+[ext_resource type="Texture2D" uid="uid://bk0ehpdwqjsl3" path="res://assets/ui/glowstick_progress/over.png" id="8_yva5w"]
+[ext_resource type="Texture2D" uid="uid://dhwmdbjkau0bp" path="res://assets/ui/glowstick_progress/progress.png" id="9_bwdpg"]
+[ext_resource type="Texture2D" uid="uid://dc8hicjofl06l" path="res://assets/ui/btn/btn_pressed.png" id="9_gqm6j"]
+[ext_resource type="Texture2D" uid="uid://blhmofjgga1wn" path="res://assets/ui/btn/btn_hover.png" id="10_c8qec"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_sc8te")
-
-[node name="messageLabel" type="Label" parent="."]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 485.0
-offset_top = 22.0
-offset_right = 748.0
-offset_bottom = 79.0
-grow_horizontal = 2
-theme_override_fonts/font = ExtResource("2_xb2y5")
-theme_override_font_sizes/font_size = 32
-text = "Ready !"
-
-[node name="messageTimer" type="Timer" parent="."]
-wait_time = 2.0
-one_shot = true
 
 [node name="batteryUi" type="TextureRect" parent="."]
 texture_filter = 1
@@ -77,14 +66,18 @@ theme_override_fonts/font = ExtResource("2_xb2y5")
 theme_override_font_sizes/font_size = 64
 text = "999"
 
-[node name="audienceHealth" type="ProgressBar" parent="."]
-offset_left = 1341.0
-offset_top = 215.0
-offset_right = 1415.0
-offset_bottom = 679.0
+[node name="audienceHealth" type="TextureProgressBar" parent="."]
+offset_left = 1338.0
+offset_top = 204.0
+offset_right = 1418.0
+offset_bottom = 684.0
 fill_mode = 3
+texture_under = ExtResource("7_r4fii")
+texture_over = ExtResource("8_yva5w")
+texture_progress = ExtResource("9_bwdpg")
 
 [node name="gameOverPicture" type="TextureRect" parent="."]
+visible = false
 texture_filter = 1
 offset_left = 656.0
 offset_top = 400.0
@@ -94,20 +87,32 @@ scale = Vector2(5, 5)
 pivot_offset = Vector2(144, 80)
 texture = ExtResource("7_gmcff")
 
-[node name="startButton" type="Button" parent="."]
+[node name="startButton" type="TextureButton" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -124.0
+offset_left = -125.0
 offset_top = -48.0
-offset_right = 126.0
-offset_bottom = 52.0
+offset_right = 131.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+texture_normal = ExtResource("8_k7pux")
+texture_pressed = ExtResource("9_gqm6j")
+texture_hover = ExtResource("10_c8qec")
+
+[node name="startLabel" type="Label" parent="startButton"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 30.0
+offset_top = 18.0
+offset_right = 218.0
+offset_bottom = 75.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_xb2y5")
 theme_override_font_sizes/font_size = 64
 text = "Start"
@@ -131,5 +136,4 @@ theme_override_fonts/font = ExtResource("2_xb2y5")
 theme_override_font_sizes/font_size = 64
 text = "00:00"
 
-[connection signal="timeout" from="messageTimer" to="." method="_on_message_timer_timeout"]
 [connection signal="pressed" from="startButton" to="." method="_on_start_button_pressed"]

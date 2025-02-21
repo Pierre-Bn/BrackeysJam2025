@@ -15,5 +15,16 @@ func _process(delta: float) -> void:
 func _on_area_2d_kill() -> void:
 	$killVirus.play()
 	await get_tree().create_timer(0.2).timeout
+	Input.set_custom_mouse_cursor(preload("res://assets/target_off.png"), 0, Vector2(40,40))
 	queue_free()
+	pass # Replace with function body.
+
+
+func _on_area_2d_mouse_entered() -> void:
+	Input.set_custom_mouse_cursor(preload("res://assets/target_on.png"), 0, Vector2(40,40))
+	pass # Replace with function body.
+
+
+func _on_area_2d_mouse_exited() -> void:
+	Input.set_custom_mouse_cursor(preload("res://assets/target_off.png"), 0, Vector2(40,40))
 	pass # Replace with function body.

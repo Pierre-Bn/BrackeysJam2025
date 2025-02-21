@@ -9,11 +9,6 @@ func _ready() -> void:
 	$audienceHealth.value = 100
 	pass # Replace with function body.
 
-func show_message(text):
-	$messageLabel.text = text
-	$messageLabel.show()
-	$messageTimer.start()
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
@@ -30,13 +25,6 @@ func show_game_over(score: int):
 	$timeResultLabel.show()
 	
 	print("show game over")
-	show_message("Game Over")
-	# Wait until the MessageTimer has counted down.
-	await $messageTimer.timeout
-	$messageLabel.text = "Dodge the Creeps!"
-	$messageLabel.show()
-	# Make a one-shot timer and wait for it to finish.
-	await get_tree().create_timer(1.0).timeout
 	$startButton.show()
 	
 	
@@ -56,9 +44,6 @@ func _on_start_button_pressed() -> void:
 	$timeResultLabel.hide()
 	$startButton.hide()
 	start_game.emit()
-
-func _on_message_timer_timeout() -> void:
-	$messageLabel.hide()
 
 func update_teto_status(angry: bool, empty: bool, happy: bool, hit: bool) -> void:
 	if(hit):

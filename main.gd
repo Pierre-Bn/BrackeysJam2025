@@ -15,6 +15,7 @@ var justHit = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Input.set_custom_mouse_cursor(preload("res://assets/target_off.png"), 0, Vector2(40,40))
 	battery = 100
 	audience_health = 1
 	angry_wave = 0
@@ -43,7 +44,7 @@ func game_over():
 
 func _on_player_hit() -> void:
 	$playerHit.play()
-	audience_health -= 5
+	audience_health -= 50
 	if(audience_health<0): 
 		audience_health = 0
 	$HUD.update_audience_health(audience_health)
@@ -76,8 +77,10 @@ func new_game():
 	time_survived = 0
 	angry_wave = 0
 	battery = 100
+	update_teto_status()
+	$HUD.update_time_survived(time_survived)
 	$HUD.update_battery(battery)
-	$HUD.show_message("Get Ready")
+	$Player.isOnPuzzle = false
 	$Player.start($playerStart.position)
 	$Player.toggleHitbox(true)
 	$Player.speed = 400
@@ -145,8 +148,8 @@ func _on_sine_spawn_timer_timeout() -> void:
 	add_child(wavePuzzleSpawner)
 	
 func _on_completed() -> void:
+	$Player.isOnPuzzle = false
 	$Player.reset_speed()
-
 
 func _on_audience_timer_timeout() -> void:
 	happyTeto = !happyTeto
@@ -170,7 +173,6 @@ func _on_angry() -> void:
 
 func _on_clear_angry() -> void:
 	angry_wave -= 1
-	
 
 func distance_to_player(x,y) -> int:
 	return sqrt(abs(x-$Player.position.x)**2 + abs(y-$Player.position.y)**2)

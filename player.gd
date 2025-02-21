@@ -9,11 +9,14 @@ signal plugBattery
 @export var speed = 400
 var previousSpeed
 var screen_size 
-var hasBattery
-var isBatteryCharged
+var hasBattery = false
+var isBatteryCharged = false
+var isOnPuzzle = false
 
 var playableCoordsTopLeft = Vector2(480,80)
 var playableCoordsBottomRight = Vector2(1120,880)
+
+
 
 func start(pos):
 	position = pos
@@ -95,7 +98,8 @@ func _on_body_entered(body: Node2D) -> void:
 		$Sprite2D.hide()
 		pass
 		
-	if (body.is_in_group("wave_puzzle_spawners")):
+	if (body.is_in_group("wave_puzzle_spawners") && !isOnPuzzle):
+		isOnPuzzle = true
 		print("walked on spawner")
 		body.call_deferred("start_puzzle")
 		previousSpeed = speed

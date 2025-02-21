@@ -6,23 +6,29 @@ extends CanvasLayer
 
 signal solved
 
-var verticalOffset = 512
+var verticalOffset = 480
 var horizontalOffset = 400
 var windowLegth = 800
 var isSolved = false
 
 
-var targetWavelength = randi_range(1,3) * 10
-var targetIntensity = randi_range(1,5) * 20
-var inputWavelength = randi_range(1,3) * 10
-var inputIntensity = randi_range(1,5) * 20
+var targetWavelength
+var targetIntensity
+var inputWavelength
+var inputIntensity
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$Panel.set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
+	
+	targetWavelength = randi_range(1,3) * 10
+	targetIntensity = randi_range(1,5) * 20
+	inputWavelength = randi_range(1,3) * 10
+	inputIntensity = randi_range(1,5) * 20
 	
 	while(inputIntensity == targetIntensity && inputWavelength == targetWavelength):
-		var inputWavelength = randi_range(1,3) * 10
-		var inputIntensity = randi_range(1,5) * 20
+		inputWavelength = randi_range(1,3) * 10
+		inputIntensity = randi_range(1,5) * 20
 		
 	$targetWave.points = generatePoints(targetWavelength, targetIntensity)
 	$inputWave.points = generatePoints(inputWavelength, inputIntensity)
@@ -34,16 +40,12 @@ func _process(delta: float) -> void:
 	if(!check_match()):
 		if(Input.is_action_just_pressed("move_up")):
 			inputIntensity += 20
-			$dialIntensity.rotation_degrees += 45
 		if(Input.is_action_just_pressed("move_down")):
 			inputIntensity -= 20
-			$dialIntensity.rotation_degrees -= 45
 		if(Input.is_action_just_pressed("move_left")):
 			inputWavelength -= 10
-			$dialWavelength.rotation_degrees += 45
 		if(Input.is_action_just_pressed("move_right")):
 			inputWavelength += 10
-			$dialWavelength.rotation_degrees -= 45
 		
 		if(inputWavelength < 10): inputWavelength = 10
 		if(inputWavelength > 30): inputWavelength = 30

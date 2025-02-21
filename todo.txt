@@ -1,4 +1,9 @@
 todo:
-	utiliser textureprogressbar pour les barres
-	texture custom boutons
-	the song!
+
+		utiliser textureprogressbar pour les barres
+		
+		the song!
+
+	
+
+?? pb : crash parfois quand debut puzzle?
