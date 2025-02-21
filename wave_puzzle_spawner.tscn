@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://tx5fc4vercbp"]
+[gd_scene load_steps=8 format=3 uid="uid://tx5fc4vercbp"]
 
 [ext_resource type="Script" path="res://wave_puzzle_spawner.gd" id="1_57vrt"]
 [ext_resource type="Texture2D" uid="uid://bya08je88xilp" path="res://assets/wave_puzzle_sprite/wave_puzzle_spawner.png" id="1_lhban"]
 [ext_resource type="PackedScene" uid="uid://b7ncio0pwxh4f" path="res://wave_puzzle.tscn" id="2_pwpmk"]
 [ext_resource type="AudioStream" uid="uid://bm3gr2ws56ulo" path="res://assets/audio/fuel_invalid.wav" id="4_2o4tu"]
 [ext_resource type="AudioStream" uid="uid://dups2irjrd1v7" path="res://assets/audio/fuel_valid.wav" id="5_uykvm"]
+[ext_resource type="PackedScene" uid="uid://clao0g7w6s71g" path="res://sign.tscn" id="6_0xur5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_34ntf"]
 size = Vector2(80, 80)
@@ -39,5 +40,11 @@ volume_db = 24.0
 [node name="completedNoise" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_uykvm")
 volume_db = 24.0
+
+[node name="warningSign" parent="." instance=ExtResource("6_0xur5")]
+texture_filter = 0
+position = Vector2(0, -80)
+animation = &"warning"
+frame_progress = 0.19989
 
 [connection signal="timeout" from="angryProgressTimer" to="." method="_on_angry_progress_timer_timeout"]

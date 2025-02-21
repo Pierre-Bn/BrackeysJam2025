@@ -10,6 +10,7 @@ var isAngry
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$warningSign.hide()
 	$angryBar.set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
 	$angryBar.value = 100
 	$angryProgressTimer.start()
@@ -19,6 +20,8 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if(!isAngry && $angryBar.value == 0):
+		$warningSign.show()
+		$warningSign.play("warning")
 		isAngry = true
 		$Sprite2D.texture = preload("res://assets/wave_puzzle_sprite/wave_puzzle_spawner_angry.png")
 		$angryNoise.play()
@@ -26,6 +29,7 @@ func _process(delta: float) -> void:
 	pass
 	
 func start_puzzle() -> void:
+	$warningSign.hide()
 	add_child(wave_puzzle_scene.instantiate())
 	var puzzle = get_node("wavePuzzle")
 	puzzle.solved.connect(_on_solved)

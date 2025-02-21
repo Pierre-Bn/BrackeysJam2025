@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://clao0g7w6s71g"]
+
+[ext_resource type="Texture2D" uid="uid://og1k70syc00d" path="res://assets/ui/arrow_1.png" id="1_id1s1"]
+[ext_resource type="Texture2D" uid="uid://drt3ks0lrddv6" path="res://assets/ui/arrow_2.png" id="2_6opgw"]
+[ext_resource type="Texture2D" uid="uid://d1yi3adc4w4jg" path="res://assets/ui/warning_1.png" id="3_igttu"]
+[ext_resource type="Texture2D" uid="uid://b61fd8fbq8ngg" path="res://assets/ui/warning_2.png" id="4_74842"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2j635"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_id1s1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_6opgw")
+}],
+"loop": true,
+"name": &"arrow",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_igttu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_74842")
+}],
+"loop": true,
+"name": &"warning",
+"speed": 10.0
+}]
+
+[node name="sign" type="AnimatedSprite2D"]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_2j635")
+animation = &"arrow"
+frame_progress = 0.855357

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://b0dxf5xj7ksb7"]
+[gd_scene load_steps=23 format=4 uid="uid://b0dxf5xj7ksb7"]
 
 [ext_resource type="PackedScene" uid="uid://cwmq66p2fgfkg" path="res://player.tscn" id="1_20vq2"]
 [ext_resource type="Script" path="res://main.gd" id="1_u8reb"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://mql5ig0peqw1" path="res://battery.tscn" id="3_eq8ru"]
 [ext_resource type="PackedScene" uid="uid://wkvaoylsgo3v" path="res://hud.tscn" id="4_v6k7g"]
 [ext_resource type="Texture2D" uid="uid://cg3hvlicrnqnb" path="res://assets/tiles/tilemap-use.png" id="5_4cmto"]
+[ext_resource type="PackedScene" uid="uid://clao0g7w6s71g" path="res://sign.tscn" id="5_4flbu"]
 [ext_resource type="PackedScene" uid="uid://tx5fc4vercbp" path="res://wave_puzzle_spawner.tscn" id="5_vpf7m"]
 [ext_resource type="Script" path="res://charge.gd" id="7_fv7ns"]
 [ext_resource type="Script" path="res://charged.gd" id="8_qbj57"]
@@ -88,6 +89,7 @@ script = ExtResource("1_u8reb")
 mob_scene = ExtResource("2_p1emh")
 battery_scene = ExtResource("3_eq8ru")
 wave_puzzle_spawner_scene = ExtResource("5_vpf7m")
+sign_scene = ExtResource("5_4flbu")
 
 [node name="Player" parent="." instance=ExtResource("1_20vq2")]
 position = Vector2(786, 512)
@@ -101,10 +103,10 @@ autostart = true
 [node name="audienceTimer" type="Timer" parent="."]
 
 [node name="batterySpawnTimer" type="Timer" parent="."]
-wait_time = 15.0
+wait_time = 10.0
 
 [node name="sineSpawnTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 9.0
 
 [node name="playerStart" type="Marker2D" parent="."]
 position = Vector2(786, 480)
@@ -122,10 +124,12 @@ rotation = 0.00999967
 [node name="Layers" type="Node" parent="."]
 
 [node name="spikes" type="TileMapLayer" parent="Layers"]
+texture_filter = 1
 tile_map_data = PackedByteArray("AAALAAAAAQAHAAIAAAAKAAAAAQAHAAIAAAAJAAAAAQAHAAIAAAAIAAAAAQAHAAIAAAAHAAAAAQAHAAIAAAAGAAAAAQAHAAIAAAAFAAAAAQAGAAEAAAAFAAsAAQAHAAEAAAAGAAsAAQAHAAIAAAAHAAsAAQAHAAIAAAAIAAsAAQAHAAIAAAAJAAsAAQAHAAIAAAAKAAsAAQAHAAIAAAALAAsAAQAHAAIAAAAMAAAAAQAHAAIAAAAMAAsAAQAHAAIAAAAFAAEAAQAIAAIAAAAFAAIAAQAIAAIAAAAFAAMAAQAIAAIAAAAFAAQAAQAIAAIAAAAFAAUAAQAIAAIAAAAFAAYAAQAIAAIAAAAFAAcAAQAIAAIAAAAFAAgAAQAIAAIAAAAFAAkAAQAIAAIAAAAFAAoAAQAIAAIAAAAOAAEAAQAIAAIAAAAOAAIAAQAIAAIAAAAOAAMAAQAIAAIAAAAOAAQAAQAIAAIAAAAOAAUAAQAIAAIAAAAOAAYAAQAIAAIAAAAOAAcAAQAIAAIAAAAOAAgAAQAIAAIAAAAOAAkAAQAIAAIAAAAOAAoAAQAIAAIAAAANAAsAAQAHAAIAAAANAAAAAQAHAAIAAAAOAAAAAQAFAAEAAAAOAAsAAQAEAAEAAAA=")
 tile_set = SubResource("TileSet_85w72")
 
 [node name="charge" type="TileMapLayer" parent="Layers"]
+texture_filter = 1
 tile_map_data = PackedByteArray("AAAIAAkAAAABAAAAAAA=")
 tile_set = SubResource("TileSet_rmodm")
 script = ExtResource("7_fv7ns")
@@ -141,10 +145,12 @@ offset_right = 720.0
 offset_bottom = 835.0
 
 [node name="charged" type="TileMapLayer" parent="Layers"]
+texture_filter = 1
 tile_set = SubResource("TileSet_b7bo0")
 script = ExtResource("8_qbj57")
 
 [node name="plug" type="TileMapLayer" parent="Layers"]
+texture_filter = 1
 tile_map_data = PackedByteArray("AAAHAAIAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_iqd3r")
 
@@ -160,12 +166,16 @@ volume_db = 24.0
 stream = ExtResource("12_mugss")
 volume_db = 24.0
 
-[node name="UI" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="signCharge" parent="." instance=ExtResource("5_4flbu")]
+position = Vector2(680, 680)
+frame_progress = 0.616627
 
+[node name="signPlug" parent="." instance=ExtResource("5_4flbu")]
+position = Vector2(600, 120)
+frame_progress = 0.620633
+
+[connection signal="getBattery" from="Player" to="." method="_on_player_get_battery"]
+[connection signal="giveBattery" from="Player" to="." method="_on_player_charge_battery"]
 [connection signal="hit" from="Player" to="." method="_on_player_hit"]
 [connection signal="plugBattery" from="Player" to="." method="_on_player_plug_battery"]
 [connection signal="timeout" from="globalTickTimer" to="." method="_on_global_tick_timer_timeout"]
@@ -175,6 +185,10 @@ offset_bottom = 40.0
 [connection signal="timeout" from="batterySpawnTimer" to="." method="_on_battery_spawn_timer_timeout"]
 [connection signal="timeout" from="sineSpawnTimer" to="." method="_on_sine_spawn_timer_timeout"]
 [connection signal="start_game" from="HUD" to="." method="new_game"]
+[connection signal="start_tuto" from="HUD" to="." method="start_tuto"]
+[connection signal="chargedBattery" from="Layers/charge" to="." method="_on_charge_charged_battery"]
 [connection signal="chargedBattery" from="Layers/charge" to="Layers/charged" method="_on_charge_charged_battery"]
+[connection signal="takeBattery" from="Layers/charge" to="." method="_on_charge_take_battery"]
 [connection signal="takeBattery" from="Layers/charge" to="Player" method="_on_charge_take_battery"]
+[connection signal="freeChargeSlot" from="Layers/charged" to="." method="_on_charged_free_charge_slot"]
 [connection signal="freeChargeSlot" from="Layers/charged" to="Layers/charge" method="_on_charged_free_charge_slot"]

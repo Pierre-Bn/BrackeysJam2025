@@ -1,10 +1,12 @@
 extends CanvasLayer
 
+signal start_tuto
 signal start_game
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$gameOverPicture.hide()
+	$tutoMgsBg.set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
 	$timeResultLabel.hide()
 	$audienceHealth.value = 100
 	pass # Replace with function body.
@@ -27,7 +29,17 @@ func show_game_over(score: int):
 	print("show game over")
 	$startButton.show()
 	
-	
+func toggle_tuto(enabled: bool):
+	if(enabled):
+		$tutoMgsBg.show()
+		$tutoMgsBg/tutoMessage.show()
+	else:
+		$tutoMgsBg.hide()
+		$tutoMgsBg/tutoMessage.hide()
+
+func setTutoMsg(msg: String):
+	$tutoMgsBg/tutoMessage.text = msg
+
 func update_battery(battery):
 	$batteryLabel.text = str(battery) + " %"
 
@@ -43,7 +55,18 @@ func _on_start_button_pressed() -> void:
 	$gameOverPicture.hide()
 	$timeResultLabel.hide()
 	$startButton.hide()
+	$tutoButton.hide()
 	start_game.emit()
+
+
+func _on_tuto_button_pressed() -> void:
+	$gameOverPicture.hide()
+	$timeResultLabel.hide()
+	$startButton.hide()
+	$tutoButton.hide()
+	start_tuto.emit()
+	
+	pass # Replace with function body.
 
 func update_teto_status(angry: bool, empty: bool, happy: bool, hit: bool) -> void:
 	if(hit):

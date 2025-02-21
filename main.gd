@@ -3,6 +3,7 @@ extends Node
 @export var mob_scene: PackedScene
 @export var battery_scene: PackedScene
 @export var wave_puzzle_spawner_scene: PackedScene
+@export var sign_scene: PackedScene
 
 var audience_health
 var battery
@@ -16,6 +17,11 @@ var justHit = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Input.set_custom_mouse_cursor(preload("res://assets/target_off.png"), 0, Vector2(40,40))
+	$signCharge.play("arrow")
+	$signPlug.play("arrow")
+	$signCharge.hide()
+	$signPlug.hide()
+	$HUD.toggle_tuto(false)
 	battery = 100
 	audience_health = 1
 	angry_wave = 0
@@ -55,9 +61,17 @@ func _on_player_hit() -> void:
 	update_teto_status()	
 	
 func _on_player_get_battery() -> void:
+	print("player picked up empty battery, showing sign")
+	$signCharge.show()
+	pass
+	
+func _on_player_charge_battery() -> void:
+	print("player put battery to charge, hiding sign")
+	$signCharge.hide()
 	pass
 
 func _on_player_plug_battery(isCharged) -> void:
+	$signPlug.hide()
 	if(isCharged):
 		$fuelValid.play()
 		battery += 20
@@ -89,14 +103,66 @@ func new_game():
 	$batterySpawnTimer.start()
 	$sineSpawnTimer.start()
 	$mobTimer.wait_time = 1
+	$signCharge.hide()
+	$signPlug.hide()
 	reset_tiles()
 
+func start_tuto() -> void:
+	$HUD.toggle_tuto(true)
+	print("tutorial")
+	audience_health = 100
+	time_survived = 0
+	angry_wave = 0
+	battery = 100
+	update_teto_status()
+	$HUD.update_time_survived(time_survived)
+	$HUD.update_battery(battery)
+	$Player.isOnPuzzle = false
+	$Player.start($playerStart.position)
+	$Player.toggleHitbox(true)
+	$Player.speed = 400
+	
+	$audienceTimer.start()
+	
+	spawn_mob()
+	$HUD.setTutoMsg("Virus :\nClick to kill,\nlose HP on contact!")
+	await get_tree().create_timer(5.0).timeout
+	
+	$HUD.setTutoMsg("The HP bar is on the right!")
+	await get_tree().create_timer(5.0).timeout
+	
+	_on_battery_spawn_timer_timeout()
+	$HUD.setTutoMsg("Battery : \nPick it up,\ncharge it up,\nplug it in to refill Teto's batteries!")
+	await get_tree().create_timer(10.0).timeout
+	
+	$HUD.setTutoMsg("Teto's batteries drain over time. You lose HP when Teto's batteries are empty!")
+	await get_tree().create_timer(5.0).timeout
+	
+	$HUD.setTutoMsg("The current battery level is on the left!")
+	await get_tree().create_timer(5.0).timeout
+	
+	_on_sine_spawn_timer_timeout()
+	$HUD.setTutoMsg("Sine wave puzzle :\nComplete it to fix Teto's voice!\nDon't wait too long, HP will drain!")
+	await get_tree().create_timer(10.0).timeout
+	
+	$HUD.setTutoMsg("Good luck! \nSurvive as long as you can, \nThe Show Must Go On!")
+	await get_tree().create_timer(5.0).timeout
+	
+	get_tree().reload_current_scene()
+	
 func reset_tiles():
 	$Layers/charge.reset()
 	$Layers/charged.reset()
 	pass
 
 func _on_mob_timer_timeout() -> void:
+	spawn_mob()
+	
+	$mobTimer.wait_time = 0.995*$mobTimer.wait_time
+	
+	pass # Replace with function body.
+	
+func spawn_mob():
 	var mob = mob_scene.instantiate()
 	
 	var mob_spawn_location = $MobPath/MobSpawnLocation
@@ -113,10 +179,6 @@ func _on_mob_timer_timeout() -> void:
 	mob.linear_velocity = velocity.rotated(direction)
 	
 	add_child(mob)
-	
-	$mobTimer.wait_time = 0.995*$mobTimer.wait_time
-	
-	pass # Replace with function body.
 
 func _on_battery_spawn_timer_timeout() -> void:
 	var battery = battery_scene.instantiate()
@@ -179,3 +241,21 @@ func distance_to_player(x,y) -> int:
 	
 func update_teto_status() -> void:
 	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto, justHit)
+
+func _on_charge_charged_battery() -> void:
+	print("charge tile finished charging, showing sign")
+	$signCharge.show()
+	pass # Replace with function body.
+
+
+func _on_charge_take_battery() -> void:
+	print("charge tile accepted battery, hiding sign")
+	$signCharge.hide()
+	pass # Replace with function body.
+
+
+func _on_charged_free_charge_slot(_ignore: bool) -> void:
+	print("charge tile dispensed full battery, moving sign")
+	$signCharge.hide()
+	$signPlug.show()
+	pass # Replace with function body.

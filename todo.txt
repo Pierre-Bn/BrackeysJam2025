@@ -1,8 +1,7 @@
-todo:
 
-		utiliser textureprogressbar pour les barres
+	
 		
-		the song!
+	the song!
 
 	
 

@@ -5,6 +5,7 @@ signal chargeBattery
 signal takeBattery
 signal giveBattery
 signal plugBattery
+signal getBattery
 
 @export var speed = 400
 var previousSpeed
@@ -72,6 +73,7 @@ func _on_body_entered(body: Node2D) -> void:
 		hit.emit()
 		$CollisionShape2D.set_deferred("disabled", true)
 	if (body.is_in_group("batteries") && !hasBattery): #picking up an empty battery from the floor
+		getBattery.emit()
 		$interactBattery.play()
 		hasBattery = true
 		isBatteryCharged = false
@@ -110,7 +112,6 @@ func reset_speed() -> void:
 	speed = previousSpeed
 
 func _on_body_exited(body: Node2D) -> void:
-	
 	if (body.name == "spikes"):
 		speed = 400
 		pass
