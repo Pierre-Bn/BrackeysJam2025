@@ -7,10 +7,9 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
-func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
+func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> void:
 	if(event.is_action_pressed("click")):
-		print("input event")
-		emit_signal("kill")
+		kill.emit()

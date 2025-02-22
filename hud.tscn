@@ -58,13 +58,13 @@ scale = Vector2(5, 5)
 texture = ExtResource("6_1i5hq")
 
 [node name="batteryLabel" type="Label" parent="."]
-offset_left = 127.0
-offset_top = 92.0
-offset_right = 240.0
-offset_bottom = 149.0
+offset_left = 107.0
+offset_top = 89.0
+offset_right = 257.0
+offset_bottom = 146.0
 theme_override_fonts/font = ExtResource("2_xb2y5")
 theme_override_font_sizes/font_size = 64
-text = "999"
+text = "100%"
 
 [node name="audienceHealth" type="TextureProgressBar" parent="."]
 offset_left = 1338.0
@@ -98,6 +98,7 @@ texture_hover = ExtResource("10_c8qec")
 
 [node name="tutoLabel" type="Label" parent="tutoButton"]
 texture_filter = 1
+layout_mode = 0
 offset_left = 18.0
 offset_top = 25.0
 offset_right = 318.0

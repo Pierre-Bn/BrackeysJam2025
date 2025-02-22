@@ -64,9 +64,9 @@ func _process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:	
-	if (body.name == "spikes"):
+	print(body.name)
+	if (body.name == "spikes" && !isOnPuzzle):
 		speed = 200
-		pass
 	if (body.is_in_group("mobs")):
 		$hitTimer.start()
 		$AnimatedSprite2D.modulate.a = 0.5;
@@ -86,8 +86,7 @@ func _on_body_entered(body: Node2D) -> void:
 	
 	if (body.name == "charged" && !(hasBattery && isBatteryCharged)): #picking up charged battery
 		$interactBattery.play()
-		print("picking up charged battery")
-		body.call_deferred("remove_battery", 8, 9, hasBattery)
+		body.call_deferred("remove_battery", 12, 9, hasBattery)
 		hasBattery = true
 		isBatteryCharged = true
 		$Sprite2D.texture = preload("res://assets/battery_sprites/battery_full.png")
@@ -98,11 +97,9 @@ func _on_body_entered(body: Node2D) -> void:
 		hasBattery = false
 		isBatteryCharged = false
 		$Sprite2D.hide()
-		pass
 		
 	if (body.is_in_group("wave_puzzle_spawners") && !isOnPuzzle):
 		isOnPuzzle = true
-		print("walked on spawner")
 		body.call_deferred("start_puzzle")
 		previousSpeed = speed
 		speed = 0
@@ -127,5 +124,4 @@ func _on_charge_take_battery() -> void:
 		hasBattery = false
 		isBatteryCharged = false
 		$Sprite2D.hide()
-		print("chargin!")
 		pass

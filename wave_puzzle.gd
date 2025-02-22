@@ -36,7 +36,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if(!check_match()):
 		if(Input.is_action_just_pressed("move_up")):
 			inputIntensity += 20
@@ -64,20 +64,19 @@ func _process(delta: float) -> void:
 			solved.emit()
 	pass
 	
-func generatePoints(wavelength: int, intensity: int):
+func generatePoints(wavelength_: int, intensity_: int):
 	
 	var array = []
 	
-	var nb_points = 800/wavelength #il faut que nb_points * wavelength = longueur de la fenetre jouable = 800
+	var nb_points = 800/wavelength_ #il faut que nb_points * wavelength = longueur de la fenetre jouable = 800
 	
 	for i in range(nb_points):
 		array.append(Vector2(
-			i*wavelength + horizontalOffset,
-			sin(i)*intensity + verticalOffset
+			i*wavelength_ + horizontalOffset,
+			sin(i)*intensity_ + verticalOffset
 		))
 		
 	return array
-	pass
 
 
 func check_match() -> bool:

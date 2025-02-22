@@ -9,10 +9,11 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 	queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func _on_area_2d_kill() -> void:
+	linear_velocity = Vector2(0,0)
 	$killVirus.play()
 	await get_tree().create_timer(0.2).timeout
 	Input.set_custom_mouse_cursor(preload("res://assets/target_off.png"), 0, Vector2(40,40))

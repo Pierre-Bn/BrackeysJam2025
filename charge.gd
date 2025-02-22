@@ -9,17 +9,20 @@ var slotAvailable
 func _ready() -> void:
 	$batteryChargeBar.hide()
 	slotAvailable = true
-	print("created charge tile")
 	pass # Replace with function body.
+	
+func stopCharge() -> void:
+	$chargeTimer.stop()
+	$batteryChargeBar.hide()
+	slotAvailable = true
+	pass
 
 func battery_submitted() -> void :
 	if(slotAvailable):
 		slotAvailable = false
 		takeBattery.emit()
-		print("starting charge")
-		var coords = Vector2i(8,9)
+		var coords = Vector2i(12,9)
 		var busyCoords = Vector2i(2,0)
-		var freeCoords = Vector2i(1,0)
 		set_cell(
 			coords,
 			0,
@@ -29,7 +32,6 @@ func battery_submitted() -> void :
 		resetProgressBar(true)
 		await $chargeTimer.timeout
 		resetProgressBar(false)
-		print("charge finished")
 		set_cell(
 			coords,
 			-1
@@ -37,9 +39,9 @@ func battery_submitted() -> void :
 		chargedBattery.emit()
 		slotAvailable = true
 		
-func resetProgressBar(show: bool):
+func resetProgressBar(showBar: bool):
 	$batteryChargeBar.value = 0
-	if(show):
+	if(showBar):
 		$batteryChargeBar.show()
 	else:
 		$batteryChargeBar.hide()
@@ -47,11 +49,11 @@ func resetProgressBar(show: bool):
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func _on_charged_free_charge_slot(immediatelyReplace : bool) -> void:
-	var coords = Vector2i(8,9)
+	var coords = Vector2i(12,9)
 	var freeCoords = Vector2i(1,0)
 	set_cell(
 		coords,
@@ -63,8 +65,11 @@ func _on_charged_free_charge_slot(immediatelyReplace : bool) -> void:
 	pass # Replace with function body.
 
 func reset():
-	var coords = Vector2i(8,9)
-	var busyCoords = Vector2i(2,0)
+	slotAvailable = true
+	$chargeTimer.stop()
+	$batteryChargeBar.hide()
+	_on_charged_free_charge_slot(false)
+	var coords = Vector2i(12,9)
 	var freeCoords = Vector2i(1,0)
 	set_cell(
 		coords,

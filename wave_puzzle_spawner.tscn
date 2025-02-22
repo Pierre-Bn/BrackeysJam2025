@@ -45,6 +45,6 @@ volume_db = 24.0
 texture_filter = 0
 position = Vector2(0, -80)
 animation = &"warning"
-frame_progress = 0.19989
+frame_progress = 0.310637
 
 [connection signal="timeout" from="angryProgressTimer" to="." method="_on_angry_progress_timer_timeout"]

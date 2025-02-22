@@ -12,8 +12,10 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
+
+	
 
 func show_game_over(score: int):
 	$gameOverPicture.texture = load(get_game_over_picture(score))
@@ -26,7 +28,6 @@ func show_game_over(score: int):
 	$timeResultLabel.text = $timeSurvivedLabel.text
 	$timeResultLabel.show()
 	
-	print("show game over")
 	$startButton.show()
 	
 func toggle_tuto(enabled: bool):
@@ -86,8 +87,8 @@ func get_game_over_picture(score: int) -> String:
 		result = "worst"
 	elif(score < 60):
 		result = "bad"
-	elif(score < 120):
+	elif(score < 150):
 		result = "good"
-	if(score >= 180):
+	if(score >= 150):
 		result = "best"
 	return "res://assets/ui/game_over_screens/" + result + ".png"

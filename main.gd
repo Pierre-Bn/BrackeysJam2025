@@ -16,6 +16,7 @@ var justHit = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	start_music()
 	Input.set_custom_mouse_cursor(preload("res://assets/target_off.png"), 0, Vector2(40,40))
 	$signCharge.play("arrow")
 	$signPlug.play("arrow")
@@ -29,10 +30,28 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if(audience_health == 0):
 		game_over();
+	
+	if(battery <= 0 || justHit):
+		$music/vocal_normal.volume_db = linear_to_db(0)
+		$music/vocal_distorted.volume_db = linear_to_db(0)
+	elif(angry_wave > 0):
+		$music/vocal_normal.volume_db = linear_to_db(0)
+		$music/vocal_distorted.volume_db = linear_to_db(5)
+	else:
+		$music/vocal_normal.volume_db = linear_to_db(5)
+		$music/vocal_distorted.volume_db = linear_to_db(0)
 		
+		
+func start_music():
+	$music/instrumental.play()
+	$music/vocal_normal.play()
+	$music/vocal_distorted.play()
+	$music/vocal_distorted.volume_db = linear_to_db(0)
+	pass
+
 
 func game_over():
 	audience_health = 100
@@ -40,17 +59,20 @@ func game_over():
 	$HUD.show_game_over(time_survived)
 	$sineSpawnTimer.stop()
 	$mobTimer.stop()
+	$Layers/charge.stopCharge()
+	reset_tiles()
 	$audienceTimer.stop()
 	$batterySpawnTimer.stop()
 	$Player.hide()
 	$Player.toggleHitbox(false)
+	Input.set_custom_mouse_cursor(preload("res://assets/target_off.png"), 0, Vector2(40,40))
 	get_tree().call_group("wave_puzzle_spawners", "queue_free")
 	get_tree().call_group("mobs", "queue_free")
 	get_tree().call_group("batteries", "queue_free")
 
 func _on_player_hit() -> void:
 	$playerHit.play()
-	audience_health -= 50
+	audience_health -= 5
 	if(audience_health<0): 
 		audience_health = 0
 	$HUD.update_audience_health(audience_health)
@@ -61,12 +83,10 @@ func _on_player_hit() -> void:
 	update_teto_status()	
 	
 func _on_player_get_battery() -> void:
-	print("player picked up empty battery, showing sign")
 	$signCharge.show()
 	pass
 	
 func _on_player_charge_battery() -> void:
-	print("player put battery to charge, hiding sign")
 	$signCharge.hide()
 	pass
 
@@ -78,6 +98,8 @@ func _on_player_plug_battery(isCharged) -> void:
 		if(battery>100):
 			battery = 100
 	else:
+		if(!$Layers/charged.chargedAvailable):
+			$signCharge.hide()
 		$fuelInvalid.play()
 		battery -= 5
 		if(battery <= 0):
@@ -86,7 +108,6 @@ func _on_player_plug_battery(isCharged) -> void:
 	update_teto_status()
 	
 func new_game():
-	print("new game")
 	audience_health = 100
 	time_survived = 0
 	angry_wave = 0
@@ -124,6 +145,9 @@ func start_tuto() -> void:
 	
 	$audienceTimer.start()
 	
+	$HUD.setTutoMsg("Spikes slow you down!")
+	await get_tree().create_timer(5.0).timeout
+	
 	spawn_mob()
 	$HUD.setTutoMsg("Virus :\nClick to kill,\nlose HP on contact!")
 	await get_tree().create_timer(5.0).timeout
@@ -160,8 +184,6 @@ func _on_mob_timer_timeout() -> void:
 	
 	$mobTimer.wait_time = 0.995*$mobTimer.wait_time
 	
-	pass # Replace with function body.
-	
 func spawn_mob():
 	var mob = mob_scene.instantiate()
 	
@@ -170,7 +192,7 @@ func spawn_mob():
 	
 	var direction = mob_spawn_location.rotation + PI / 2
 	
-	mob.position = mob_spawn_location.position
+	mob.position = mob_spawn_location.global_position
 	
 	direction += randf_range(-PI / 4, PI / 4)
 	mob.rotation = direction
@@ -181,29 +203,40 @@ func spawn_mob():
 	add_child(mob)
 
 func _on_battery_spawn_timer_timeout() -> void:
-	var battery = battery_scene.instantiate()
-	battery.position = Vector2(
-		randi_range(playableCoordsTopLeft.x, playableCoordsBottomRight.x), 
-		randi_range(playableCoordsTopLeft.y, playableCoordsBottomRight.y)
+	var battery_ = battery_scene.instantiate()
+	battery_.position = Vector2(
+		randi_range(playableCoordsTopLeft.x+80, playableCoordsBottomRight.x-80), 
+		randi_range(playableCoordsTopLeft.y+80, playableCoordsBottomRight.y-80)
 	)
-	while(distance_to_player(battery.position.x, battery.position.y) < 200):
-		battery.position = Vector2(
-			randi_range(playableCoordsTopLeft.x, playableCoordsBottomRight.x), 
-			randi_range(playableCoordsTopLeft.y, playableCoordsBottomRight.y)
+	
+	while(distance_between(battery_.position, $Player.position) < 200 ||
+		distance_between(battery_.position, Vector2(1000,760)) < 100 || 
+		distance_between(battery_.position, Vector2(600,200)) < 100
+	):
+		battery_.position = Vector2(
+			randi_range(playableCoordsTopLeft.x+80, playableCoordsBottomRight.x-80), 
+			randi_range(playableCoordsTopLeft.y+80, playableCoordsBottomRight.y-80)
 		)
-	add_child(battery)
+		
+	add_child(battery_)
 	
 func _on_sine_spawn_timer_timeout() -> void:
 	var wavePuzzleSpawner = wave_puzzle_spawner_scene.instantiate()
 	wavePuzzleSpawner.position = Vector2(
-		randi_range(playableCoordsTopLeft.x, playableCoordsBottomRight.x), 
-		randi_range(playableCoordsTopLeft.y, playableCoordsBottomRight.y)
+		randi_range(playableCoordsTopLeft.x+80, playableCoordsBottomRight.x-80), 
+		randi_range(playableCoordsTopLeft.y+80, playableCoordsBottomRight.y-80)
 	)
-	while(distance_to_player(wavePuzzleSpawner.position.x, wavePuzzleSpawner.position.y) < 200):
+	
+	while(
+		distance_between(wavePuzzleSpawner.position, $Player.position) < 200 || 
+		distance_between(wavePuzzleSpawner.position, Vector2(1000,760)) < 100 || 
+		distance_between(wavePuzzleSpawner.position, Vector2(600,200)) < 100
+	):
 		wavePuzzleSpawner.position = Vector2(
-			randi_range(playableCoordsTopLeft.x, playableCoordsBottomRight.x), 
-			randi_range(playableCoordsTopLeft.y, playableCoordsBottomRight.y)
+			randi_range(playableCoordsTopLeft.x+80, playableCoordsBottomRight.x-80), 
+			randi_range(playableCoordsTopLeft.y+80, playableCoordsBottomRight.y-80)
 		)
+
 	wavePuzzleSpawner.completed.connect(_on_completed)
 	wavePuzzleSpawner.angry.connect(_on_angry)
 	wavePuzzleSpawner.clear_angry.connect(_on_clear_angry)
@@ -215,14 +248,12 @@ func _on_completed() -> void:
 
 func _on_audience_timer_timeout() -> void:
 	happyTeto = !happyTeto
-	battery -= 1
-	print(battery)
-	print(angry_wave)
+	battery -= 2
 	if(battery <= 0):
 		battery = 0
-		audience_health -= 1
+		audience_health -= 3
 	if(angry_wave > 0):
-		audience_health -= 2
+		audience_health -= 1
 	time_survived += 1
 	$HUD.update_time_survived(time_survived)
 	$HUD.update_battery(battery)
@@ -235,27 +266,24 @@ func _on_angry() -> void:
 
 func _on_clear_angry() -> void:
 	angry_wave -= 1
-
-func distance_to_player(x,y) -> int:
-	return sqrt(abs(x-$Player.position.x)**2 + abs(y-$Player.position.y)**2)
+	
+func distance_between(a: Vector2, b: Vector2) -> int:
+	return sqrt(abs(a.x-b.x)**2 + abs(a.y-b.y)**2)
 	
 func update_teto_status() -> void:
 	$HUD.update_teto_status(angry_wave>0, battery == 0, happyTeto, justHit)
 
 func _on_charge_charged_battery() -> void:
-	print("charge tile finished charging, showing sign")
 	$signCharge.show()
 	pass # Replace with function body.
 
 
 func _on_charge_take_battery() -> void:
-	print("charge tile accepted battery, hiding sign")
 	$signCharge.hide()
 	pass # Replace with function body.
 
 
 func _on_charged_free_charge_slot(_ignore: bool) -> void:
-	print("charge tile dispensed full battery, moving sign")
 	$signCharge.hide()
 	$signPlug.show()
 	pass # Replace with function body.
