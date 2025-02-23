@@ -99,6 +99,7 @@ func _on_player_plug_battery(isCharged) -> void:
 			battery = 100
 	else:
 		if(!$Layers/charged.chargedAvailable):
+			print("charged available")
 			$signCharge.hide()
 		$fuelInvalid.play()
 		battery -= 5
@@ -145,7 +146,7 @@ func start_tuto() -> void:
 	
 	$audienceTimer.start()
 	
-	$HUD.setTutoMsg("Spikes slow you down!")
+	$HUD.setTutoMsg("Wires slow you down!")
 	await get_tree().create_timer(5.0).timeout
 	
 	spawn_mob()
@@ -252,6 +253,8 @@ func _on_audience_timer_timeout() -> void:
 	if(battery <= 0):
 		battery = 0
 		audience_health -= 3
+		if(audience_health <= 0):
+			audience_health = 0
 	if(angry_wave > 0):
 		audience_health -= 1
 	time_survived += 1

@@ -1,18 +1,38 @@
-[gd_scene load_steps=14 format=3 uid="uid://wkvaoylsgo3v"]
+[gd_scene load_steps=21 format=3 uid="uid://wkvaoylsgo3v"]
 
 [ext_resource type="Script" path="res://hud.gd" id="1_sc8te"]
 [ext_resource type="FontFile" uid="uid://ci7hujwf6b2mu" path="res://assets/fonts/vcr_osd_mono/VCR_OSD_MONO_1.001.ttf" id="2_xb2y5"]
-[ext_resource type="Texture2D" uid="uid://cmfg6emtmvblc" path="res://assets/ui/battery.png" id="3_qiukj"]
+[ext_resource type="Texture2D" uid="uid://db15doyruvh0" path="res://assets/ui/battery_bg.png" id="2_y1vnf"]
 [ext_resource type="Texture2D" uid="uid://dqhe6l5vny3r3" path="res://assets/ui/teto_status/teto_status_good_1.png" id="4_72d4i"]
 [ext_resource type="Texture2D" uid="uid://cae0gsy2dr8jm" path="res://assets/ui/timer_bg.png" id="5_hh4mc"]
 [ext_resource type="Texture2D" uid="uid://b68vngsurxi66" path="res://assets/ui/glowstick_bg.png" id="6_1i5hq"]
-[ext_resource type="Texture2D" uid="uid://dwpfe38553vv8" path="res://assets/ui/game_over_screens/bad.png" id="7_gmcff"]
+[ext_resource type="Texture2D" uid="uid://cfqu3u181tha4" path="res://assets/ui/battery_progress/battery_under.png" id="6_4ldvp"]
+[ext_resource type="Texture2D" uid="uid://c7yl4knsjiuc5" path="res://assets/ui/battery_progress/battery_over.png" id="7_6vdjg"]
 [ext_resource type="Texture2D" uid="uid://clo0havn183iu" path="res://assets/ui/glowstick_progress/under.png" id="7_r4fii"]
+[ext_resource type="Texture2D" uid="uid://c8f6y37iorb0m" path="res://assets/ui/battery_progress/battery_progress.png" id="8_32p1c"]
 [ext_resource type="Texture2D" uid="uid://c2c4huuxnd0vi" path="res://assets/ui/btn/btn_normal.png" id="8_k7pux"]
 [ext_resource type="Texture2D" uid="uid://bk0ehpdwqjsl3" path="res://assets/ui/glowstick_progress/over.png" id="8_yva5w"]
 [ext_resource type="Texture2D" uid="uid://dhwmdbjkau0bp" path="res://assets/ui/glowstick_progress/progress.png" id="9_bwdpg"]
 [ext_resource type="Texture2D" uid="uid://dc8hicjofl06l" path="res://assets/ui/btn/btn_pressed.png" id="9_gqm6j"]
+[ext_resource type="Texture2D" uid="uid://d1yi3adc4w4jg" path="res://assets/ui/warning_1.png" id="10_a3nh1"]
 [ext_resource type="Texture2D" uid="uid://blhmofjgga1wn" path="res://assets/ui/btn/btn_hover.png" id="10_c8qec"]
+[ext_resource type="Texture2D" uid="uid://b61fd8fbq8ngg" path="res://assets/ui/warning_2.png" id="11_dafmg"]
+[ext_resource type="Texture2D" uid="uid://7eemyukegvw3" path="res://assets/ui/game_over_screens/bg.png" id="15_f40uy"]
+[ext_resource type="Texture2D" uid="uid://bdsaeym4vexgp" path="res://assets/ui/game_over_screens/good.png" id="16_cg34r"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_itjxt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_a3nh1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_dafmg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_sc8te")
@@ -22,7 +42,7 @@ texture_filter = 1
 offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(5, 5)
-texture = ExtResource("3_qiukj")
+texture = ExtResource("2_y1vnf")
 
 [node name="tetoUi" type="TextureRect" parent="."]
 texture_filter = 1
@@ -57,27 +77,54 @@ offset_bottom = 320.0
 scale = Vector2(5, 5)
 texture = ExtResource("6_1i5hq")
 
-[node name="batteryLabel" type="Label" parent="."]
-offset_left = 107.0
-offset_top = 89.0
-offset_right = 257.0
-offset_bottom = 146.0
+[node name="batteryProgressBar" type="TextureProgressBar" parent="."]
+texture_filter = 1
+offset_left = 80.0
+offset_top = 50.0
+offset_right = 126.0
+offset_bottom = 90.0
+scale = Vector2(5, 5)
+texture_under = ExtResource("6_4ldvp")
+texture_over = ExtResource("7_6vdjg")
+texture_progress = ExtResource("8_32p1c")
+
+[node name="batteryLabel" type="Label" parent="batteryProgressBar"]
+texture_filter = 1
+offset_left = 7.2
+offset_top = 7.4
+offset_right = 157.2
+offset_bottom = 64.4
+scale = Vector2(0.1, 0.1)
 theme_override_fonts/font = ExtResource("2_xb2y5")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 128
 text = "100%"
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="batteryProgressBar"]
+position = Vector2(25, 14)
+sprite_frames = SubResource("SpriteFrames_itjxt")
+
 [node name="audienceHealth" type="TextureProgressBar" parent="."]
-offset_left = 1338.0
-offset_top = 204.0
-offset_right = 1418.0
-offset_bottom = 684.0
+texture_filter = 1
+offset_left = 1330.0
+offset_top = 205.0
+offset_right = 1357.0
+offset_bottom = 303.0
+scale = Vector2(5, 5)
 fill_mode = 3
 texture_under = ExtResource("7_r4fii")
 texture_over = ExtResource("8_yva5w")
 texture_progress = ExtResource("9_bwdpg")
 
-[node name="gameOverPicture" type="TextureRect" parent="."]
-visible = false
+[node name="timeSurvivedLabel" type="Label" parent="."]
+offset_left = 1213.0
+offset_top = 18.0
+offset_right = 1588.0
+offset_bottom = 131.0
+theme_override_fonts/font = ExtResource("2_xb2y5")
+theme_override_font_sizes/font_size = 128
+text = "00:00"
+
+[node name="gameOverScreen" type="TextureRect" parent="."]
 texture_filter = 1
 offset_left = 656.0
 offset_top = 400.0
@@ -85,7 +132,15 @@ offset_right = 944.0
 offset_bottom = 560.0
 scale = Vector2(5, 5)
 pivot_offset = Vector2(144, 80)
-texture = ExtResource("7_gmcff")
+texture = ExtResource("15_f40uy")
+
+[node name="gameOverPicture" type="TextureRect" parent="gameOverScreen"]
+offset_left = 13.6
+offset_top = 12.0
+offset_right = 132.6
+offset_bottom = 172.0
+texture = ExtResource("16_cg34r")
+stretch_mode = 2
 
 [node name="tutoButton" type="TextureButton" parent="."]
 offset_left = 675.0
@@ -139,23 +194,14 @@ theme_override_fonts/font = ExtResource("2_xb2y5")
 theme_override_font_sizes/font_size = 64
 text = "Start"
 
-[node name="timeSurvivedLabel" type="Label" parent="."]
-offset_left = 1212.0
-offset_top = 22.0
-offset_right = 1587.0
-offset_bottom = 135.0
-theme_override_fonts/font = ExtResource("2_xb2y5")
-theme_override_font_sizes/font_size = 128
-text = "00:00"
-
 [node name="timeResultLabel" type="Label" parent="."]
-offset_left = 1083.0
-offset_top = 413.0
-offset_right = 1271.0
-offset_bottom = 470.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+offset_left = 1040.0
+offset_top = 312.0
+offset_right = 1324.0
+offset_bottom = 398.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("2_xb2y5")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 96
 text = "00:00"
 
 [node name="tutoMgsBg" type="Panel" parent="."]

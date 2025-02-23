@@ -5,10 +5,13 @@ signal start_game
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$gameOverPicture.hide()
+	$batteryProgressBar/AnimatedSprite2D.play("default")
+	$batteryProgressBar/AnimatedSprite2D.hide()
+	$gameOverScreen.hide()
 	$tutoMgsBg.set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
 	$timeResultLabel.hide()
 	$audienceHealth.value = 100
+	$batteryProgressBar.value = 100
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -18,12 +21,12 @@ func _process(_delta: float) -> void:
 	
 
 func show_game_over(score: int):
-	$gameOverPicture.texture = load(get_game_over_picture(score))
+	$gameOverScreen/gameOverPicture.texture = load(get_game_over_picture(score))
 	
-	$startButton.position.x = 1030
-	$startButton.position.y = 666
+	$startButton.position.x = 1056
+	$startButton.position.y = 612
 	
-	$gameOverPicture.show()
+	$gameOverScreen.show()
 	
 	$timeResultLabel.text = $timeSurvivedLabel.text
 	$timeResultLabel.show()
@@ -42,7 +45,12 @@ func setTutoMsg(msg: String):
 	$tutoMgsBg/tutoMessage.text = msg
 
 func update_battery(battery):
-	$batteryLabel.text = str(battery) + " %"
+	$batteryProgressBar.value = battery
+	$batteryProgressBar/batteryLabel.text = str(battery) + " %"
+	if(battery <= 0):
+		$batteryProgressBar/AnimatedSprite2D.show()
+	else:
+		$batteryProgressBar/AnimatedSprite2D.hide()
 
 func update_audience_health(health):
 	$audienceHealth.value = health
@@ -53,7 +61,7 @@ func update_time_survived(timeSurvived):
 	$timeSurvivedLabel.text = ("%02d" % minutes) + ":" + ("%02d" % seconds)
 
 func _on_start_button_pressed() -> void:
-	$gameOverPicture.hide()
+	$gameOverScreen.hide()
 	$timeResultLabel.hide()
 	$startButton.hide()
 	$tutoButton.hide()
@@ -61,7 +69,7 @@ func _on_start_button_pressed() -> void:
 
 
 func _on_tuto_button_pressed() -> void:
-	$gameOverPicture.hide()
+	$gameOverScreen.hide()
 	$timeResultLabel.hide()
 	$startButton.hide()
 	$tutoButton.hide()

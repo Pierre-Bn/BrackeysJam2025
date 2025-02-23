@@ -9,13 +9,13 @@ https://www.youtube.com/watch?v=uGBbVvsEa0s
 UTAU Voicebank : Kasane Teto
 https://kasaneteto.jp/
 
-All other assets handmade
+Font : VCR OSD Mono by Riciery Leal
+https://www.dafont.com/vcr-osd-mono.font
 
 === SOFTWARE USED ===
 
 Godot Engine 4.3 - https://godotengine.org/download/windows/
-Paint		 - (no link)
-LibreSprite	 - https://libresprite.github.io/#!/downloads
+Paint.NET	 - https://www.getpaint.net/
 Audacity	 - https://v2-audacity.com/
 UTAU		 - https://utau2008.xrea.jp/
 		
@@ -25,6 +25,6 @@ Tutorial :
 The tutorial events and messages are timer based, it would be better to have a "next step" button
 
 Code base :
-The code isn't very clean, I wasn't quite used to the GDScript style guide so node/function/signal aren't very consistently names
+The code isn't very clean, I wasn't quite used to the GDScript style guide so node/function/signal aren't very consistently named
 
 === THANK YOU!! ===

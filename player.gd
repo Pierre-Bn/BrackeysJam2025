@@ -14,8 +14,8 @@ var hasBattery = false
 var isBatteryCharged = false
 var isOnPuzzle = false
 
-var playableCoordsTopLeft = Vector2(480,80)
-var playableCoordsBottomRight = Vector2(1120,880)
+var playableCoordsTopLeft = Vector2(520,160)
+var playableCoordsBottomRight = Vector2(1080,880)
 
 
 
@@ -45,6 +45,9 @@ func _process(delta: float) -> void:
 		velocity.y += 1
 	if Input.is_action_pressed("move_up"):
 		velocity.y -= 1
+
+	if(isOnPuzzle):
+		speed = 0
 
 	if (velocity.length() > 0):
 		velocity = velocity.normalized() * speed

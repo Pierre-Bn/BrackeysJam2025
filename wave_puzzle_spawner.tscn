@@ -42,8 +42,8 @@ stream = ExtResource("5_uykvm")
 volume_db = 24.0
 
 [node name="warningSign" parent="." instance=ExtResource("6_0xur5")]
-texture_filter = 0
 position = Vector2(0, -80)
+scale = Vector2(5, 5)
 animation = &"warning"
 frame_progress = 0.310637
 

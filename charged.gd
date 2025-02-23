@@ -32,6 +32,7 @@ func remove_battery(x : int, y : int, immediatelyReplace : bool) -> void:
 		-1
 	)
 	freeChargeSlot.emit(immediatelyReplace)
+	chargedAvailable = false
 	pass
 
 func reset():
